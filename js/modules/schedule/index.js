@@ -1393,26 +1393,26 @@ const ScheduleModule = {
 
         // 次週の日付行
         const nextWeek = weeks[1] || [];
-        html += `<tr><td class="memo-lbl" style="font-size:10px;">来週</td>`;
+        html += `<tr><td class="memo-lbl" style="font-size:10px;height:10mm;">来週</td>`;
         for (let i = 0; i < 5; i++) {
             if (nextWeek[i]) {
                 const m = nextWeek[i].getMonth() + 1, d = nextWeek[i].getDate();
-                html += `<td class="next-week">${dayNames[i]} ${m}/${d}</td>`;
+                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;">${dayNames[i]} ${m}/${d}</td>`;
             } else {
-                html += `<td class="next-week"></td>`;
+                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;"></td>`;
             }
         }
         html += `</tr>`;
 
         // 再来週の日付行
         const weekAfterNext = weeks[2] || [];
-        html += `<tr><td class="memo-lbl" style="font-size:10px;">再来週</td>`;
+        html += `<tr><td class="memo-lbl" style="font-size:10px;height:10mm;">再来週</td>`;
         for (let i = 0; i < 5; i++) {
             if (weekAfterNext[i]) {
                 const m = weekAfterNext[i].getMonth() + 1, d = weekAfterNext[i].getDate();
-                html += `<td class="next-week">${dayNames[i]} ${m}/${d}</td>`;
+                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;">${dayNames[i]} ${m}/${d}</td>`;
             } else {
-                html += `<td class="next-week"></td>`;
+                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;"></td>`;
             }
         }
         html += `</tr></tbody></table>`;
