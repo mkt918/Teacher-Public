@@ -1278,7 +1278,7 @@ const ScheduleModule = {
 
         /* メモ欄（時間割テーブルと列幅を揃えるためtable使用） */
         table.memo { width: 100%; border-collapse: collapse; margin-top: 6px; table-layout: fixed; }
-        table.memo td { border: 2px solid #333; padding: 4px 5px; vertical-align: top; height: 43mm; }
+        table.memo td { border: 2px solid #333; padding: 4px 5px; vertical-align: top; height: 48mm; }
         table.memo td.memo-lbl { background: #f0f0f0; width: 58px; text-align: center; font-weight: bold; font-size: 11px; border-right: 2px solid #333; }
         table.memo th { border: 2px solid #333; background: #eef2ff; text-align: center; font-size: 13px; padding: 4px; }
         table.memo th.memo-lbl-head { width: 58px; background: #f0f0f0; border-right: 2px solid #333; }
