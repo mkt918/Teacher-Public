@@ -1393,11 +1393,16 @@ const ScheduleModule = {
 
         // 次週の日付行
         const nextWeek = weeks[1] || [];
+        const nextWeekKey = nextWeek[0] ? this._formatDate(nextWeek[0]) : null;
+        const nextWeekMemos = nextWeekKey ? ((this.dashboardMemos[this.activeTimetable] || {})[nextWeekKey] || {}) : {};
         html += `<tr><td class="memo-lbl" style="font-size:10px;height:10mm;">来週</td>`;
         for (let i = 0; i < 5; i++) {
             if (nextWeek[i]) {
                 const m = nextWeek[i].getMonth() + 1, d = nextWeek[i].getDate();
-                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;">${dayNames[i]} ${m}/${d}</td>`;
+                const dateStr = this._formatDate(nextWeek[i]);
+                const beforeMemo = (nextWeekMemos[dateStr] || {})[-1] || '';
+                const memoHtml = beforeMemo ? `<br><span style="color:#dc2626;font-weight:bold;">${beforeMemo}</span>` : '';
+                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;">${dayNames[i]} ${m}/${d}${memoHtml}</td>`;
             } else {
                 html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;"></td>`;
             }
@@ -1406,11 +1411,16 @@ const ScheduleModule = {
 
         // 再来週の日付行
         const weekAfterNext = weeks[2] || [];
+        const weekAfterNextKey = weekAfterNext[0] ? this._formatDate(weekAfterNext[0]) : null;
+        const weekAfterNextMemos = weekAfterNextKey ? ((this.dashboardMemos[this.activeTimetable] || {})[weekAfterNextKey] || {}) : {};
         html += `<tr><td class="memo-lbl" style="font-size:10px;height:10mm;">再来週</td>`;
         for (let i = 0; i < 5; i++) {
             if (weekAfterNext[i]) {
                 const m = weekAfterNext[i].getMonth() + 1, d = weekAfterNext[i].getDate();
-                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;">${dayNames[i]} ${m}/${d}</td>`;
+                const dateStr = this._formatDate(weekAfterNext[i]);
+                const beforeMemo = (weekAfterNextMemos[dateStr] || {})[-1] || '';
+                const memoHtml = beforeMemo ? `<br><span style="color:#dc2626;font-weight:bold;">${beforeMemo}</span>` : '';
+                html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;">${dayNames[i]} ${m}/${d}${memoHtml}</td>`;
             } else {
                 html += `<td style="border:2px solid #333;padding:3px 5px;vertical-align:top;height:10mm;font-size:10px;color:#555;"></td>`;
             }
