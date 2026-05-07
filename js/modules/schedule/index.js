@@ -1282,7 +1282,7 @@ const ScheduleModule = {
         table.memo td.memo-lbl { background: #f0f0f0; width: 58px; text-align: center; font-weight: bold; font-size: 11px; border-right: 2px solid #333; }
         table.memo th { border: 2px solid #333; background: #eef2ff; text-align: center; font-size: 13px; padding: 4px; }
         table.memo th.memo-lbl-head { width: 58px; background: #f0f0f0; border-right: 2px solid #333; }
-        table.memo td.next-week { height: 3mm; vertical-align: top; padding: 3px 5px; font-size: 10px; color: #555; }
+        table.memo td.next-week { height: 10mm !important; vertical-align: top; padding: 3px 5px; font-size: 10px; color: #555; }
 
         /* ToDoリスト */
         .todo-section { margin-top: 6px; border: 1px solid #bbb; border-radius: 4px; padding: 5px 8px; }
