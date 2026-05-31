@@ -2,8 +2,8 @@
 // GASと通信して schedule / todos / events を自動同期する
 
 const CloudSync = {
-    // GASのデプロイURL（設定ページで入力する）
-    gasUrl: '',
+    // GASのデプロイURL
+    gasUrl: 'https://script.google.com/macros/s/AKfycby9oh4D6RFTNpqW0qzvWbKh3J2omyD-ohr5CVNvZN5UilOKPNCeOqwRS50Jfc95bOw/exec',
     apiKey: 'teacher-app-sync-key-2026',
 
     // 同期状態
@@ -15,10 +15,7 @@ const CloudSync = {
 
     // 初期化
     init() {
-        const data = StorageManager.getCurrentData();
-        const syncSettings = data.syncSettings || {};
-        this.gasUrl = syncSettings.gasUrl || '';
-        this.enabled = !!(this.gasUrl);
+        this.enabled = true;
 
         if (this.enabled) {
             // 起動時にクラウドから読み込む
