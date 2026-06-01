@@ -893,6 +893,7 @@ const DashboardModule = {
         const data = window.StorageManager?.getCurrentData() || {};
         data.todos = this.todos;
         window.StorageManager?.updateCurrentData(data);
+        if (window.CloudSync) window.CloudSync.triggerSync();
     },
 
     loadTodos() {

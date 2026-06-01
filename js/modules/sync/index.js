@@ -47,7 +47,7 @@ const CloudSync = {
                 apiKey: this.apiKey,
                 schedule: data.schedule || null,
                 todos: data.todos || [],
-                events: data.events || []
+                calendar: data.calendar || null
             };
 
             const res = await fetch(this.gasUrl, {
@@ -93,7 +93,7 @@ const CloudSync = {
                 let changed = false;
                 if (json.schedule) { data.schedule = json.schedule; changed = true; }
                 if (json.todos)    { data.todos = json.todos;       changed = true; }
-                if (json.events)   { data.events = json.events;     changed = true; }
+                if (json.calendar) { data.calendar = json.calendar; changed = true; }
 
                 if (changed) {
                     data.syncSettings = data.syncSettings || {};
@@ -134,7 +134,7 @@ const CloudSync = {
             let changed = false;
             if (json.schedule) { data.schedule = json.schedule; changed = true; }
             if (json.todos)    { data.todos = json.todos;       changed = true; }
-            if (json.events)   { data.events = json.events;     changed = true; }
+            if (json.calendar) { data.calendar = json.calendar; changed = true; }
 
             if (changed) {
                 data.syncSettings = data.syncSettings || {};

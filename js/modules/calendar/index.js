@@ -368,6 +368,7 @@ const CalendarModule = {
         const data = window.StorageManager?.getCurrentData() || {};
         data.calendar = { events: this.events };
         window.StorageManager?.updateCurrentData(data);
+        if (window.CloudSync) window.CloudSync.triggerSync();
     },
 
     /**
