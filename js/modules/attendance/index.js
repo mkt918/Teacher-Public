@@ -341,7 +341,7 @@ const AttendanceModule = {
         html += '<th style="width: 80px;">番号</th><th style="width: 120px;">氏名</th>';
 
         subjectNames.forEach(sub => {
-            html += `<th title="${sub} (単位: ${credits[sub]})">${sub}<br><span style="font-size:0.8em">(${credits[sub]})</span></th>`;
+            html += `<th class="subject-header" data-subject="${escapeHtml(sub)}" title="クリックで授業一覧" style="cursor:pointer;">${sub}<br><span style="font-size:0.8em">(${credits[sub]})</span></th>`;
         });
         html += '</tr></thead><tbody>';
 
@@ -397,6 +397,11 @@ const AttendanceModule = {
 
         if (!container.dataset.boundRows) {
             container.addEventListener('click', (e) => {
+                const th = e.target.closest('.subject-header');
+                if (th) {
+                    this.openSubjectDetailModal(th.dataset.subject);
+                    return;
+                }
                 const row = e.target.closest('.student-row');
                 if (row) {
                     const student = students.find(s => s.id === row.dataset.id);
@@ -405,6 +410,70 @@ const AttendanceModule = {
             });
             container.dataset.boundRows = 'true';
         }
+    },
+
+    openSubjectDetailModal(subjectName) {
+        const sm = window.ScheduleModule;
+        if (!sm) return;
+
+        const dayKeys  = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+        const dayLabel = ['日', '月', '火', '水', '木', '金', '土'];
+
+        // 年度始め（4月1日）〜今日までの全日付を走査
+        const today = new Date();
+        const fiscalStart = new Date(today.getMonth() >= 3 ? today.getFullYear() : today.getFullYear() - 1, 3, 1);
+
+        const lessons = [];
+        const cur = new Date(fiscalStart);
+        while (cur <= today) {
+            const dow = cur.getDay();
+            const dayKey = dayKeys[dow];
+            if (dow !== 0 && dow !== 6) {
+                const dateStr = `${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}-${String(cur.getDate()).padStart(2,'0')}`;
+                const base = sm.classTimetable[dayKey] || [];
+                const changes = sm.dailyChanges?.class?.[dateStr] || {};
+                base.forEach((sub, idx) => {
+                    const effective = changes[idx] !== undefined ? changes[idx] : sub;
+                    if (effective === subjectName) {
+                        lessons.push({ dateStr, dow, period: idx + 1 });
+                    }
+                });
+            }
+            cur.setDate(cur.getDate() + 1);
+        }
+
+        const rows = lessons.map(({ dateStr, dow, period }) => {
+            const [y, m, d] = dateStr.split('-');
+            return `<tr>
+                <td style="padding:6px 12px;">${parseInt(m)}/${parseInt(d)}</td>
+                <td style="padding:6px 12px;">${dayLabel[dow]}曜日</td>
+                <td style="padding:6px 12px; text-align:center;">${period}限</td>
+            </tr>`;
+        }).join('');
+
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width:400px; max-height:80vh; display:flex; flex-direction:column;">
+                <div class="modal-header">
+                    <h3>${escapeHtml(subjectName)}（${lessons.length}コマ）</h3>
+                    <button class="modal-close" id="closeSubjectModal">✕</button>
+                </div>
+                <div class="modal-body" style="overflow-y:auto; flex:1;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead><tr style="border-bottom:2px solid #e2e8f0;">
+                            <th style="padding:6px 12px; text-align:left;">日付</th>
+                            <th style="padding:6px 12px; text-align:left;">曜日</th>
+                            <th style="padding:6px 12px; text-align:center;">時限</th>
+                        </tr></thead>
+                        <tbody>${rows || '<tr><td colspan="3" style="padding:12px; text-align:center; color:#94a3b8;">授業記録なし</td></tr>'}</tbody>
+                    </table>
+                </div>
+            </div>`;
+
+        document.body.appendChild(modal);
+        modal.querySelector('#closeSubjectModal').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     },
 
     calculateSubjectCredits() {
