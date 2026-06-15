@@ -761,11 +761,34 @@ const ScheduleModule = {
                 const input = prompt(promptMsg, current);
                 if (input && input.trim() && input.trim() !== current) {
                     const newVal = input.trim();
+
+                    // マスター更新
                     if (type === 'class') {
                         this.classSubjects[idx] = newVal;
                     } else {
                         this.mySubjects[idx] = newVal;
                     }
+
+                    // 時間割セルを過去にさかのぼって一括置換
+                    const timetables = type === 'class'
+                        ? [this.classTimetable]
+                        : [this.myTimetable];
+                    timetables.forEach(tt => {
+                        Object.keys(tt).forEach(day => {
+                            tt[day] = tt[day].map(s => s === current ? newVal : s);
+                        });
+                    });
+
+                    // dailyChanges も置換
+                    const changesKey = type === 'class' ? 'class' : 'my';
+                    const changes = this.dailyChanges[changesKey] || {};
+                    Object.keys(changes).forEach(dateStr => {
+                        const day = changes[dateStr];
+                        Object.keys(day).forEach(periodIdx => {
+                            if (day[periodIdx] === current) day[periodIdx] = newVal;
+                        });
+                    });
+
                     this.saveData();
                     this.renderSettingsPage();
                 }
