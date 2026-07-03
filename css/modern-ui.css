@@ -3251,3 +3251,258 @@ select:focus {
     font-size: 0.9em;
     color: #64748b;
 }
+
+/* =====================================================================
+   保護者会時間決定：ユニバーサルデザイン強化
+   誰でも迷わず押せるよう、ボタン・文字・タップ領域を大きく、
+   コントラストをはっきりさせる。#page-meeting 配下に限定して適用する。
+   ===================================================================== */
+
+/* ヘッダーの操作ボタン群 */
+#page-meeting .page-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#page-meeting .page-actions .btn {
+    min-height: 44px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+#page-meeting .page-actions .btn:focus-visible,
+#page-meeting button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+/* 未割り当て生徒リスト：カードを大きく、タップしやすく */
+#page-meeting .meeting-student-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    min-height: 56px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+#page-meeting .meeting-student-item:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+#page-meeting .meeting-student-item .student-number {
+    font-size: 0.85rem !important;
+    font-weight: 700;
+    color: #64748b !important;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+#page-meeting .meeting-student-item .student-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+#page-meeting .meeting-student-item .btn {
+    min-height: 40px;
+    padding: 8px 14px !important;
+    font-size: 0.88rem !important;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+/* 進捗表示・見出し */
+#page-meeting #meetingPrefProgress {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0284c7;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+#page-meeting .meeting-sidebar h3,
+#page-meeting .meeting-main h3 {
+    font-size: 1.15rem;
+}
+
+/* スケジュール表：セルを大きく、文字をはっきり */
+#page-meeting .matrix-corner,
+#page-meeting .matrix-time-header {
+    width: 130px;
+    min-width: 130px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+#page-meeting .matrix-header-date {
+    min-width: 140px;
+    padding: 14px 10px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+#page-meeting .matrix-slot {
+    min-width: 140px;
+    min-height: 76px;
+    padding: 10px;
+}
+
+#page-meeting .slot-student-chip {
+    font-size: 1rem;
+    padding: 6px 44px 6px 8px !important;
+}
+
+#page-meeting .slot-student-chip .chip-number {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #475569;
+    display: block;
+}
+
+#page-meeting .slot-student-chip .chip-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* ロック・削除ボタンを大きく、押しやすく */
+#page-meeting .remove-assignment {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 18px !important;
+    top: 6px !important;
+    right: 6px !important;
+    opacity: 0.85 !important;
+}
+
+#page-meeting .student-lock-btn {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 20px !important;
+    top: 6px !important;
+    right: 38px !important;
+    opacity: 0.85 !important;
+}
+
+#page-meeting .slot-empty-lock-btn {
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700;
+    border-radius: 8px !important;
+    min-height: 32px;
+}
+
+/* 希望入力モーダル：選択マスをタップしやすく、選択状態を色＋チェックで明示 */
+#meetingPreferenceModal .pref-matrix .matrix-slot {
+    min-height: 44px !important;
+    min-width: 100px !important;
+    padding: 4px !important;
+    font-size: 1rem !important;
+    cursor: pointer;
+}
+
+#meetingPreferenceModal .pref-matrix .matrix-header-date {
+    min-width: 100px !important;
+    padding: 8px !important;
+    font-size: 0.95rem !important;
+}
+
+#meetingPreferenceModal .pref-matrix .matrix-corner,
+#meetingPreferenceModal .pref-matrix .matrix-time-header {
+    width: 90px !important;
+    min-width: 90px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700;
+}
+
+#meetingPreferenceModal .pref-slot {
+    font-size: 1.3rem !important;
+    font-weight: 900;
+    border-radius: 8px;
+    margin: 2px;
+}
+
+#meetingPreferenceModal .pref-slot.selected::after {
+    content: '✓';
+}
+
+#meetingPreferenceModal .col-select-btn {
+    min-height: 32px;
+    padding: 6px 10px !important;
+    font-size: 0.8rem !important;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    cursor: pointer;
+    margin: 2px;
+}
+
+#meetingPreferenceModal .col-select-btn:hover {
+    background: #3b82f6;
+    color: #fff;
+    border-color: #3b82f6;
+}
+
+#meetingPreferenceModal .modal-content {
+    max-width: 95vw;
+}
+
+#meetingPreferenceModal #preferenceModalTitle {
+    font-size: 1.2rem;
+}
+
+#meetingPreferenceModal .modal-footer .btn,
+#meetingSettingsModal .modal-footer .btn,
+#meetingHistoryModal .modal-footer .btn {
+    min-height: 46px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+}
+
+/* 日程設定モーダル：フォームを大きく、ラベルを明確に */
+#meetingSettingsModal .form-group label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+#meetingSettingsModal input[type="date"],
+#meetingSettingsModal input[type="time"],
+#meetingSettingsModal input[type="number"] {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+/* 履歴モーダル */
+#meetingHistoryModal .history-item {
+    min-height: 56px;
+    padding: 12px 14px;
+    font-size: 1rem;
+}
+
+#meetingHistoryModal .history-actions .btn {
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}

@@ -61,7 +61,7 @@ Object.assign(MeetingModule, {
                     ${dates.map(date => {
                 const slot = grouped[date].find(s => s.time === time);
                 const isSelected = prefs.includes(slot.id);
-                return `<div class="matrix-slot pref-slot ${isSelected ? 'selected' : ''}" data-slot-id="${escapeHtml(slot.id)}" data-date="${escapeHtml(date)}">${isSelected ? '〇' : ''}</div>`;
+                return `<div class="matrix-slot pref-slot ${isSelected ? 'selected' : ''}" data-slot-id="${escapeHtml(slot.id)}" data-date="${escapeHtml(date)}"></div>`;
             }).join('')}
                 </div>
             `;
@@ -74,7 +74,6 @@ Object.assign(MeetingModule, {
         container.querySelectorAll('.pref-slot').forEach(el => {
             el.addEventListener('click', () => {
                 el.classList.toggle('selected');
-                el.innerText = el.classList.contains('selected') ? '〇' : '';
             });
         });
 
@@ -135,52 +134,64 @@ Object.assign(MeetingModule, {
         // 配置すべき生徒を抽出
         const studentsToAssign = students.filter(s => !lockedStudentIds.has(s.id));
 
-        // アルゴリズム: 制約が厳しい（希望枠が少ない）生徒から順に埋める
-        const studentData = studentsToAssign.map(s => {
-            let studentPrefs = prefs[s.id] || [];
-            let validPrefs = studentPrefs.filter(id => {
-                const slot = slots.find(sl => sl.id === id);
-                return slot && !slot.studentId && !lockedSlotIds.has(id);
-            });
-
-            return {
-                id: s.id,
-                name: s.nameKanji,
-                prefs: validPrefs,
-                prefCount: validPrefs.length === 0 ? 999 : validPrefs.length
-            };
-        });
-
-        // 希望枠が少ない順にソート
-        studentData.sort((a, b) => a.prefCount - b.prefCount);
-
+        // ── アルゴリズム: 「希望枠が一番少ない生徒」を優先して1人ずつ確定させる ──
+        // 単純に最初の希望枠数だけでソートすると、割り当てが進むにつれて
+        // 他の生徒の希望枠が埋まり、実質的な選択肢が変わってしまい、
+        // 後半で「希望が全滅」する生徒が出てデッドロックしやすくなる。
+        // そこで、1人割り当てるたびに残り生徒の「今なお選べる希望枠の数」を
+        // 再計算し、その時点で一番少ない生徒から確定させていく（貪欲法）。
+        const remaining = new Map(studentsToAssign.map(s => [s.id, s]));
+        const noPrefIds = []; // 希望が最初から無い生徒（最後にまとめて空き枠へ）
         let successCount = 0;
         let failStudents = [];
 
-        studentData.forEach(sData => {
-            let assigned = false;
-
-            if (sData.prefs.length > 0) {
-                for (let slotId of sData.prefs) {
-                    const slot = slots.find(sl => sl.id === slotId);
-                    if (slot && !slot.studentId) {
-                        slot.studentId = sData.id;
-                        assigned = true;
-                        successCount++;
-                        break;
-                    }
-                }
+        studentsToAssign.forEach(s => {
+            if (!(prefs[s.id] && prefs[s.id].length > 0)) {
+                noPrefIds.push(s.id);
             }
+        });
+        noPrefIds.forEach(id => remaining.delete(id));
 
-            if (!assigned) {
-                const remainingSlot = slots.find(sl => !sl.studentId && !lockedSlotIds.has(sl.id));
-                if (remainingSlot) {
-                    remainingSlot.studentId = sData.id;
-                    assigned = true;
-                    successCount++;
-                } else {
-                    failStudents.push(sData.name);
+        // 希望を持つ生徒を、希望枠が少ない順に1人ずつ確定
+        while (remaining.size > 0) {
+            let pickId = null;
+            let pickValidPrefs = null;
+            let minCount = Infinity;
+
+            remaining.forEach((s, id) => {
+                const validPrefs = (prefs[id] || []).filter(slotId => {
+                    const slot = slots.find(sl => sl.id === slotId);
+                    return slot && !slot.studentId && !lockedSlotIds.has(slotId);
+                });
+                if (validPrefs.length < minCount) {
+                    minCount = validPrefs.length;
+                    pickId = id;
+                    pickValidPrefs = validPrefs;
                 }
+            });
+
+            const student = remaining.get(pickId);
+            remaining.delete(pickId);
+
+            if (pickValidPrefs.length > 0) {
+                const slot = slots.find(sl => sl.id === pickValidPrefs[0]);
+                slot.studentId = student.id;
+                successCount++;
+            } else {
+                // 希望していた枠がすべて埋まってしまった生徒 → 後で空き枠に回す
+                noPrefIds.push(student.id);
+            }
+        }
+
+        // 希望が無い・希望が全滅した生徒を、残った空き枠に順番に配置
+        noPrefIds.forEach(id => {
+            const student = students.find(s => s.id === id);
+            const remainingSlot = slots.find(sl => !sl.studentId && !lockedSlotIds.has(sl.id));
+            if (remainingSlot) {
+                remainingSlot.studentId = id;
+                successCount++;
+            } else {
+                failStudents.push(student ? student.nameKanji : id);
             }
         });
 
@@ -190,20 +201,14 @@ Object.assign(MeetingModule, {
         if (failStudents.length > 0) {
             alert(`${successCount}人を配置しました。\n枠が足りない、または希望が重なり配置できなかった生徒: ${failStudents.join(', ')}`);
         } else {
-            alert(`${successCount}人の配置が完了しました！`);
+            alert(`${successCount}人の配置が完了しました！\n（希望枠が少ない生徒を優先して配置しています）`);
         }
     },
 
     // 列（日付）ごとに一括選択/解除
     toggleColumnPref(date, select) {
         document.querySelectorAll(`.pref-slot[data-date="${date}"]`).forEach(el => {
-            if (select) {
-                el.classList.add('selected');
-                el.innerText = '〇';
-            } else {
-                el.classList.remove('selected');
-                el.innerText = '';
-            }
+            el.classList.toggle('selected', select);
         });
     },
 
