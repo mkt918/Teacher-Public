@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教員業務支援アプリ</title>
-    <link rel="stylesheet" href="css/style.css?v=20260601i">
-    <link rel="stylesheet" href="css/modern-ui.css?v=20260601i">
+    <link rel="stylesheet" href="css/style.css?v=20260601j">
+    <link rel="stylesheet" href="css/modern-ui.css?v=20260601j">
 </head>
 
 <body>
@@ -359,15 +359,44 @@
             <!-- 保護者会時間決定ページ -->
             <div class="page" id="page-meeting">
                 <div class="page-header">
-                    <h2>保護者会時間決定</h2>
+                    <h2>📅 保護者会時間決定</h2>
                     <div class="page-actions">
-                        <button class="btn btn-secondary" id="printMeetingNumberBtn">🖨️
-                            番号のみ</button>
-                        <button class="btn btn-secondary" id="printMeetingFullBtn">🖨️
-                            番号+名前</button>
-                        <button class="btn btn-secondary" id="clearMeetingBtn">🗑️ 全クリア</button>
-                        <button class="btn btn-success" id="openMeetingHistoryModalBtn">💾 保護者会を保存／読取</button>
-                        <button class="btn btn-primary" id="meetingSettingsBtn">⚙️ 日程設定</button>
+                        <button class="btn btn-secondary" id="meetingHelpToggleBtn">❓ 使い方</button>
+                        <div style="width: 1px; height: 24px; background: #ccc; margin: 0 5px;"></div>
+                        <button class="btn btn-secondary" id="printMeetingNumberBtn">🖨️ 番号のみ印刷</button>
+                        <button class="btn btn-secondary" id="printMeetingFullBtn">🖨️ 番号+名前で印刷</button>
+                        <button class="btn btn-success" id="openMeetingHistoryModalBtn">💾 保存／読込</button>
+                        <button class="btn btn-primary" id="meetingSettingsBtn">① ⚙️ 日程を設定する</button>
+                    </div>
+                </div>
+
+                <!-- 使い方ガイド -->
+                <div class="seating-help-panel" id="meetingHelpPanel" style="display:none;">
+                    <div class="seating-help-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="seating-help-block">
+                            <div class="seating-help-step">STEP 1</div>
+                            <div class="seating-help-title">⚙️ 日程を設定する</div>
+                            <p>「日程を設定する」で面談を行う期間・時間帯・1人あたりの時間を決め、時間枠を作ります。</p>
+                        </div>
+                        <div class="seating-help-block">
+                            <div class="seating-help-step">STEP 2</div>
+                            <div class="seating-help-title">✏️ 希望時間を集める</div>
+                            <p>左の生徒一覧で「希望を入力」ボタンを押し、生徒（保護者）が来られる時間帯を選びます。</p>
+                        </div>
+                        <div class="seating-help-block">
+                            <div class="seating-help-step">STEP 3</div>
+                            <div class="seating-help-title">⚡ 自動配置・確認</div>
+                            <p>「自動配置」で希望に沿って一括で割り当てます。「希望どおりか確認」で結果をチェックできます。</p>
+                        </div>
+                        <div class="seating-help-block">
+                            <div class="seating-help-step">STEP 4</div>
+                            <div class="seating-help-title">💾 保存・印刷する</div>
+                            <p>「保存／読込」で名前を付けて保存できます（希望時間も一緒に保存されます）。印刷で紙に出力できます。</p>
+                        </div>
+                    </div>
+                    <div class="seating-help-legend">
+                        <span><span class="legend-icon">🔓</span> 配置された生徒をクリックでロック（自動配置で動かなくなります）</span>
+                        <span><span class="legend-icon">空枠</span> クリックでその時間枠を「誰も入れない」に固定します</span>
                     </div>
                 </div>
 
@@ -375,10 +404,11 @@
                     <!-- 左サイド: 未割り当て生徒 -->
                     <div class="meeting-sidebar">
                         <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <h3 style="margin: 0;">未割り当て生徒</h3>
-                            <button class="btn btn-sm btn-outline-danger" id="resetAllPrefsBtn">希望リセット</button>
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <h3 style="margin: 0;">② 👤 未割り当ての生徒</h3>
+                            <button class="btn btn-sm btn-outline-danger" id="resetAllPrefsBtn">希望を全員分リセット</button>
                         </div>
+                        <p class="seating-controls-note" id="meetingPrefProgress" style="margin-bottom:8px;"></p>
                         <div class="meeting-student-list" id="meetingStudentList">
                             <div class="empty-state-small">
                                 <p>生徒名簿から生徒を登録してください</p>
@@ -390,17 +420,16 @@
                     <div class="meeting-main">
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <h3 id="scheduleTitle" style="margin: 0;">スケジュール表</h3>
+                            <h3 id="scheduleTitle" style="margin: 0;">③ スケジュール表</h3>
                             <div style="display: flex; gap: 10px;">
-                                <button class="btn btn-info" id="checkPreferencesBtn" style="font-weight: bold;">🔍
-                                    Check 開始</button>
-                                <button class="btn btn-warning" id="autoScheduleMeetingBtn" style="font-weight: bold;">⚡
-                                    自動配置</button>
+                                <button class="btn btn-info" id="checkPreferencesBtn" style="font-weight: bold;">🔍 希望どおりか確認する</button>
+                                <button class="btn btn-warning" id="autoScheduleMeetingBtn" style="font-weight: bold;">⚡ 自動配置する</button>
+                                <button class="btn btn-outline-danger" id="clearMeetingBtn">🗑️ 日程をやり直す</button>
                             </div>
                         </div>
                         <div class="schedule-container" id="meetingSchedule">
                             <div class="empty-state">
-                                <p>「日程設定」ボタンから期間と時間を設定してください。</p>
+                                <p>まず右上の「① 日程を設定する」ボタンから期間と時間を設定してください。</p>
                             </div>
                         </div>
                     </div>
@@ -1283,40 +1312,40 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="js/utils.js?v=20260601i"></script>
-    <script src="js/storage.js?v=20260601i"></script>
-    <script src="js/file-storage.js?v=20260601i"></script>
-    <script src="js/router.js?v=20260601i"></script>
-    <script src="js/modules/master.js?v=20260601i"></script>
-    <script src="js/modules/memo.js?v=20260601i"></script>
-    <script src="js/modules/seating-core.js?v=20260601i"></script>
-    <script src="js/modules/seating-lottery.js?v=20260601i"></script>
-    <script src="js/modules/seating-history.js?v=20260601i"></script>
-    <script src="js/modules/seating-print.js?v=20260601i"></script>
-    <script src="js/modules/duties.js?v=20260601i"></script>
-    <script src="js/modules/meeting-core.js?v=20260601i"></script>
-    <script src="js/modules/meeting-history.js?v=20260601i"></script>
-    <script src="js/modules/meeting-preference.js?v=20260601i"></script>
-    <script src="js/modules/meeting-print.js?v=20260601i"></script>
+    <script src="js/utils.js?v=20260601j"></script>
+    <script src="js/storage.js?v=20260601j"></script>
+    <script src="js/file-storage.js?v=20260601j"></script>
+    <script src="js/router.js?v=20260601j"></script>
+    <script src="js/modules/master.js?v=20260601j"></script>
+    <script src="js/modules/memo.js?v=20260601j"></script>
+    <script src="js/modules/seating-core.js?v=20260601j"></script>
+    <script src="js/modules/seating-lottery.js?v=20260601j"></script>
+    <script src="js/modules/seating-history.js?v=20260601j"></script>
+    <script src="js/modules/seating-print.js?v=20260601j"></script>
+    <script src="js/modules/duties.js?v=20260601j"></script>
+    <script src="js/modules/meeting-core.js?v=20260601j"></script>
+    <script src="js/modules/meeting-history.js?v=20260601j"></script>
+    <script src="js/modules/meeting-preference.js?v=20260601j"></script>
+    <script src="js/modules/meeting-print.js?v=20260601j"></script>
     <!-- 新機能モジュール -->
-    <script src="js/modules/schedule/index.js?v=20260601i"></script>
-    <script src="js/modules/calendar/index.js?v=20260601i"></script>
-    <script src="js/modules/dashboard/index.js?v=20260601i"></script>
-    <script src="js/modules/bus/index.js?v=20260601i"></script>
-    <script src="js/modules/groups/index.js?v=20260601i"></script>
-    <script src="js/modules/attendance/index.js?v=20260601i"></script>
-    <script src="js/core/reactive.js?v=20260601i"></script>
-    <script src="js/core/dom-diff.js?v=20260601i"></script>
-    <script src="js/core/sync.js?v=20260601i"></script>
-    <script src="js/modules/test-tools/util.js?v=20260601i"></script>
-    <script src="js/modules/test-tools/word-group.js?v=20260601i"></script>
-    <script src="js/modules/test-tools/qm-renderer.js?v=20260601i"></script>
-    <script src="js/modules/test-tools/qm-events.js?v=20260601i"></script>
-    <script src="js/modules/test-tools/question-maker.js?v=20260601i"></script>
-    <script src="js/modules/test-tools/index.js?v=20260601i"></script>
-    <script src="js/modules/report/index.js?v=20260601i"></script>
-    <script src="js/modules/sync/index.js?v=20260601i"></script>
-    <script src="js/app.js?v=20260601i"></script>
+    <script src="js/modules/schedule/index.js?v=20260601j"></script>
+    <script src="js/modules/calendar/index.js?v=20260601j"></script>
+    <script src="js/modules/dashboard/index.js?v=20260601j"></script>
+    <script src="js/modules/bus/index.js?v=20260601j"></script>
+    <script src="js/modules/groups/index.js?v=20260601j"></script>
+    <script src="js/modules/attendance/index.js?v=20260601j"></script>
+    <script src="js/core/reactive.js?v=20260601j"></script>
+    <script src="js/core/dom-diff.js?v=20260601j"></script>
+    <script src="js/core/sync.js?v=20260601j"></script>
+    <script src="js/modules/test-tools/util.js?v=20260601j"></script>
+    <script src="js/modules/test-tools/word-group.js?v=20260601j"></script>
+    <script src="js/modules/test-tools/qm-renderer.js?v=20260601j"></script>
+    <script src="js/modules/test-tools/qm-events.js?v=20260601j"></script>
+    <script src="js/modules/test-tools/question-maker.js?v=20260601j"></script>
+    <script src="js/modules/test-tools/index.js?v=20260601j"></script>
+    <script src="js/modules/report/index.js?v=20260601j"></script>
+    <script src="js/modules/sync/index.js?v=20260601j"></script>
+    <script src="js/app.js?v=20260601j"></script>
     <!-- 設定メニュー用スクリプト（確実な動作のためここに記述） -->
     <script>
         function openSettingsMenu() {

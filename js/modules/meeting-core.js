@@ -9,6 +9,18 @@ const MeetingModule = {
         if (this.initialized) return;
         this.setupEventListeners();
         this.initialized = true;
+
+        // 初めての利用時は使い方ガイドを自動で開く
+        try {
+            if (!localStorage.getItem('meetingHelpSeen')) {
+                const panel = document.getElementById('meetingHelpPanel');
+                const btn = document.getElementById('meetingHelpToggleBtn');
+                if (panel) panel.style.display = 'block';
+                if (btn) btn.classList.add('active');
+                localStorage.setItem('meetingHelpSeen', '1');
+            }
+        } catch (e) { /* localStorage不可でも致命的ではない */ }
+
         console.log('📅 Meeting Module initialized');
     },
 
@@ -138,6 +150,18 @@ const MeetingModule = {
                 this.checkAssignmentsAgainstPreferences();
             });
         }
+
+        // 使い方ガイドの開閉
+        const helpToggleBtn = document.getElementById('meetingHelpToggleBtn');
+        if (helpToggleBtn) {
+            helpToggleBtn.addEventListener('click', () => {
+                const panel = document.getElementById('meetingHelpPanel');
+                if (!panel) return;
+                const isVisible = panel.style.display !== 'none';
+                panel.style.display = isVisible ? 'none' : 'block';
+                helpToggleBtn.classList.toggle('active', !isVisible);
+            });
+        }
     },
 
     render() {
@@ -157,10 +181,20 @@ const MeetingModule = {
         // 配置済み生徒ID
         const assignedIds = new Set(slots.map(s => s.studentId).filter(id => id));
 
+        // 希望入力の進捗を表示（全生徒に対して）
+        const progressEl = document.getElementById('meetingPrefProgress');
+        if (progressEl) {
+            const prefsMap = (data.meeting && data.meeting.studentPreferences) || {};
+            const prefFilledCount = students.filter(s => prefsMap[s.id] && prefsMap[s.id].length > 0).length;
+            progressEl.textContent = students.length > 0
+                ? `希望入力済み: ${prefFilledCount} / ${students.length}人`
+                : '';
+        }
+
         const unassigned = students.filter(s => !assignedIds.has(s.id));
 
         if (unassigned.length === 0) {
-            container.innerHTML = '<div class="empty-state-small"><p>全員配置済み</p></div>';
+            container.innerHTML = '<div class="empty-state-small"><p>✅ 全員配置済みです</p></div>';
             return;
         }
 
@@ -174,8 +208,8 @@ const MeetingModule = {
                     </div>
                     <button class="btn btn-sm ${hasPref ? 'btn-info' : 'btn-outline-secondary'}"
                             onclick="window.MeetingModule.openPreferenceModal('${escapeHtml(student.id)}')"
-                            title="希望時間を設定" style="padding: 2px 5px; font-size: 0.8em;">
-                        ${hasPref ? '★希望' : '⚙️希望'}
+                            title="この生徒の希望時間を入力します" style="padding: 2px 6px; font-size: 0.8em; white-space:nowrap;">
+                        ${hasPref ? '✓ 希望入力済み' : '希望を入力'}
                     </button>
                 </div>
             `;
@@ -521,10 +555,15 @@ const MeetingModule = {
     },
 
     clearAll() {
-        if (!confirm('すべての割り当てとスケジュール設定を削除しますか？')) return;
+        if (!confirm('日程設定・座席割り当てなど、保護者会のスケジュールをすべて削除します。\n（保存済みの希望時間・保存履歴は消えません）\n\nよろしいですか？')) return;
 
         const data = StorageManager.getCurrentData();
-        data.meeting = { settings: {}, slots: [] };
+        if (!data.meeting) data.meeting = {};
+        // スケジュール関連のみリセットし、希望時間・保存履歴は維持する
+        data.meeting.settings = {};
+        data.meeting.slots = [];
+        data.meeting.lockedSlots = [];
+        data.meeting.lockedStudents = [];
         StorageManager.updateCurrentData(data);
         this.render();
     },
