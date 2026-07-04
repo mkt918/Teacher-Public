@@ -342,6 +342,32 @@ const AttendanceModule = {
     /**
      * 出欠サマリー描画
      */
+    // 生徒1人分の科目別欠席状況から、警告レベル情報を計算する
+    _calculateStudentWarningInfo(absenceCounts, credits, subjectNames) {
+        let worstLevel = 'ok'; // 'ok' | 'warn' | 'strong' | 'retention'
+        const subjectRows = subjectNames.map(sub => {
+            const count = absenceCounts[sub] || 0;
+            const credit = credits[sub];
+            const limitWarn = credit * 7;
+            const limitStrong = credit * 9;
+            const limitRetain = credit * 11;
+
+            let level = 'ok';
+            if (count > limitRetain) level = 'retention';
+            else if (count > limitStrong) level = 'strong';
+            else if (count > limitWarn) level = 'warn';
+
+            const order = { ok: 0, warn: 1, strong: 2, retention: 3 };
+            if (order[level] > order[worstLevel]) worstLevel = level;
+
+            const remaining = limitRetain - count;
+            const remainingText = remaining >= 0 ? `あと${remaining}` : '留年';
+
+            return { sub, count, level, remainingText };
+        });
+        return { worstLevel, subjectRows };
+    },
+
     renderAttendanceSummary() {
         const container = document.getElementById('attendanceSummary');
         if (!container) return;
@@ -352,60 +378,56 @@ const AttendanceModule = {
         const credits = this.calculateSubjectCredits();
         const subjectNames = Object.keys(credits).sort();
 
-        let html = '<div class="attendance-summary-wrapper" style="overflow-x: auto;">';
-        html += '<div style="margin-bottom: 15px; font-weight: bold;">生徒をクリックして出欠を入力してください</div>';
+        const levelLabel = { ok: '順調', warn: '注意', strong: '要注意', retention: '留年基準超過' };
+        const levelStyle = {
+            ok: 'background:#f1f5f9; color:#475569;',
+            warn: 'background:#fef9c3; color:#854d0e;',
+            strong: 'background:#fee2e2; color:#b91c1c;',
+            retention: 'background:#1e293b; color:#fff;'
+        };
 
-        html += '<table class="attendance-table"><thead><tr>';
-        html += '<th style="width: 80px;">番号</th><th style="width: 120px;">氏名</th>';
-
-        subjectNames.forEach(sub => {
-            html += `<th class="subject-header" data-subject="${escapeHtml(sub)}" title="クリックで授業一覧" style="cursor:pointer;">${sub}<br><span style="font-size:0.8em">(${credits[sub]})</span></th>`;
-        });
-        html += '</tr></thead><tbody>';
+        let html = '<div class="attendance-accordion">';
+        html += '<div style="margin-bottom: 12px; font-weight: bold;">生徒をクリックすると出欠状況の詳細が開きます（一度に1人だけ開きます）</div>';
 
         students.forEach(student => {
             const absenceCounts = this.calculateAbsenceCounts(student.id);
+            const { worstLevel, subjectRows } = this._calculateStudentWarningInfo(absenceCounts, credits, subjectNames);
 
-            let rowHtml = `<tr class="student-row" data-id="${student.id}" style="cursor: pointer;">`;
-            rowHtml += `<td>${escapeHtml(student.number)}</td>`;
-            rowHtml += `<td>${escapeHtml(student.nameKanji)}</td>`;
-
-            subjectNames.forEach(sub => {
-                const count = absenceCounts[sub] || 0;
-                const credit = credits[sub];
-                const limitWarn = credit * 7;
-                const limitStrong = credit * 9;
-                const limitRetain = credit * 11;
-
-                let cellClass = '';
-                let cellStyle = '';
-
-                if (count > limitRetain) {
-                    cellClass = 'cell-retention tr-retention';
-                    cellStyle = 'text-align: center; font-weight: bold;';
-                } else if (count > limitStrong) {
-                    cellClass = 'cell-strong-warning tr-strong-warning';
-                    cellStyle = 'text-align: center; font-weight: bold; color: #b91c1c;';
-                } else if (count > limitWarn) {
-                    cellClass = 'cell-warning tr-warning';
-                    cellStyle = 'text-align: center; font-weight: bold; color: #854d0e;';
-                } else {
-                    cellStyle = 'text-align: center;';
-                }
-
-                const remaining = limitRetain - count;
-                const remainingText = remaining >= 0 ? `あと${remaining}` : '留年';
-
-                rowHtml += `<td class="${cellClass}" style="${cellStyle}">
-                    <div style="font-size: 1.1em;">${count}</div>
-                    <div style="font-size: 0.7em; opacity: 0.8;">${remainingText}</div>
-                </td>`;
-            });
-            rowHtml += '</tr>';
-            html += rowHtml;
+            html += `
+                <div class="att-accordion-item" data-id="${escapeHtml(student.id)}">
+                    <button type="button" class="att-accordion-header" data-id="${escapeHtml(student.id)}" aria-expanded="false">
+                        <span class="att-acc-number">${escapeHtml(student.number)}</span>
+                        <span class="att-acc-name">${escapeHtml(student.nameKanji)}</span>
+                        <span class="att-acc-status" style="${levelStyle[worstLevel]}">${levelLabel[worstLevel]}</span>
+                        <span class="att-acc-arrow">▶</span>
+                    </button>
+                    <div class="att-accordion-body" style="display:none;">
+                        <table class="att-acc-subject-table">
+                            <thead><tr><th>科目</th><th>単位</th><th>欠席数</th><th>残り</th></tr></thead>
+                            <tbody>
+                                ${subjectRows.map(r => `
+                                    <tr class="att-acc-subject-row" data-subject="${escapeHtml(r.sub)}" title="クリックで授業一覧" style="${levelStyle[r.level]}">
+                                        <td style="text-align:left;">${escapeHtml(r.sub)}</td>
+                                        <td>${credits[r.sub]}</td>
+                                        <td>${r.count}</td>
+                                        <td>${r.remainingText}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <div class="att-acc-actions">
+                            <button class="btn btn-primary btn-sm att-acc-input-btn" data-id="${escapeHtml(student.id)}">📝 出欠を入力する</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
 
-        html += '</tbody></table></div>';
+        if (students.length === 0) {
+            html += '<div class="empty-state-small"><p>生徒名簿から生徒を登録してください</p></div>';
+        }
+
+        html += '</div>';
 
         if (window.CoreDOM) {
             window.CoreDOM.updateDOMWithState(container, html);
@@ -418,16 +440,46 @@ const AttendanceModule = {
         if (oldHandler) container.removeEventListener('click', oldHandler);
 
         const handler = (e) => {
-            const th = e.target.closest('.subject-header');
-            if (th) {
-                this.openSubjectDetailModal(th.dataset.subject);
+            // 科目一覧を開く（アコーディオン内の科目行）
+            const subjectRow = e.target.closest('.att-acc-subject-row');
+            if (subjectRow) {
+                this.openSubjectDetailModal(subjectRow.dataset.subject);
                 return;
             }
-            const row = e.target.closest('.student-row');
-            if (row) {
+
+            // 出欠入力モーダルを開く
+            const inputBtn = e.target.closest('.att-acc-input-btn');
+            if (inputBtn) {
                 const data2 = window.StorageManager?.getCurrentData() || {};
-                const student = (data2.students || []).find(s => s.id === row.dataset.id);
+                const student = (data2.students || []).find(s => s.id === inputBtn.dataset.id);
                 if (student) this.openStudentAttendanceModal(student);
+                return;
+            }
+
+            // アコーディオンの開閉（対象の生徒以外はすべて閉じる＝1人だけ開く）
+            const header = e.target.closest('.att-accordion-header');
+            if (header) {
+                const targetId = header.dataset.id;
+                container.querySelectorAll('.att-accordion-item').forEach(item => {
+                    const body = item.querySelector('.att-accordion-body');
+                    const h = item.querySelector('.att-accordion-header');
+                    const arrow = item.querySelector('.att-acc-arrow');
+                    const isTarget = item.dataset.id === targetId;
+                    const isCurrentlyOpen = body.style.display !== 'none';
+
+                    if (isTarget) {
+                        // 対象は開閉トグル
+                        const nextOpen = !isCurrentlyOpen;
+                        body.style.display = nextOpen ? 'block' : 'none';
+                        h.setAttribute('aria-expanded', String(nextOpen));
+                        arrow.textContent = nextOpen ? '▼' : '▶';
+                    } else {
+                        // 対象以外はすべて閉じる（アコーディオンに収納）
+                        body.style.display = 'none';
+                        h.setAttribute('aria-expanded', 'false');
+                        arrow.textContent = '▶';
+                    }
+                });
             }
         };
         container._clickHandler = handler;
@@ -530,6 +582,13 @@ const AttendanceModule = {
         return credits;
     },
 
+    // dateStrが指定年度（4月始まり）に属するか判定
+    _isDateInFiscalYear(dateStr, fiscalYear) {
+        const [y, m] = dateStr.split('-').map(Number);
+        const recordFiscalYear = m >= 4 ? y : y - 1;
+        return recordFiscalYear === fiscalYear;
+    },
+
     calculateAbsenceCounts(studentId) {
         const counts = {};
         const records = this.attendance[studentId] || {};
@@ -537,7 +596,12 @@ const AttendanceModule = {
 
         if (!sm) return counts;
 
+        const fiscalYear = getFiscalYear();
+
         Object.entries(records).forEach(([dateStr, record]) => {
+            // 選択中の年度以外の記録は累計に含めない
+            if (!this._isDateInFiscalYear(dateStr, fiscalYear)) return;
+
             const date = new Date(dateStr);
             const dayKey = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][date.getDay()];
             if (dayKey === 'sun' || dayKey === 'sat') return;
@@ -574,7 +638,7 @@ const AttendanceModule = {
         let currentMonth = today.getMonth();
 
         modal.innerHTML = `
-            <div class="modal-content modal-large">
+            <div class="modal-content modal-large" style="max-width: 980px; width: 96vw;">
                 <div class="modal-header">
                     <h3>${escapeHtml(student.number)} ${escapeHtml(student.nameKanji)} の出欠記録</h3>
                     <button class="modal-close" aria-label="閉じる" id="closeAttModal">✕</button>
@@ -596,6 +660,7 @@ const AttendanceModule = {
                         <label class="calendar-lock-toggle" id="lockMonthLabel">
                             <input type="checkbox" id="lockMonthCheck"> 月ロック
                         </label>
+                        <button class="btn btn-sm btn-secondary" id="openAbsenceListBtn" style="margin-left:auto;">📋 欠席一覧をすべて見る</button>
                     </div>
                     <div id="attendanceCalendar" class="attendance-table-wrap">
                         <!-- 日付×時限の一覧表を描画 -->
@@ -691,6 +756,82 @@ const AttendanceModule = {
             modal.remove();
             this.render();
         });
+
+        modal.querySelector('#openAbsenceListBtn').addEventListener('click', () => {
+            this.openAbsenceListModal(student);
+        });
+    },
+
+    /**
+     * 生徒の欠席一覧（どの授業を何日に休んだか）をすべて表示するモーダル
+     * 選択中の年度（設定済みの年度）の記録のみを対象とする。
+     */
+    openAbsenceListModal(student) {
+        const sm = window.ScheduleModule;
+        const dayLabels = ['日', '月', '火', '水', '木', '金', '土'];
+        const fiscalYear = getFiscalYear();
+
+        const records = this.attendance[student.id] || {};
+        const rows = [];
+
+        Object.entries(records).forEach(([dateStr, record]) => {
+            if (!this._isDateInFiscalYear(dateStr, fiscalYear)) return;
+
+            const dateObj = new Date(dateStr);
+            const dow = dateObj.getDay();
+            const dayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const dayKey = dayKeys[dow];
+            if (dayKey === 'sun' || dayKey === 'sat') return;
+
+            const baseSchedule = sm ? (sm.classTimetable[dayKey] || []) : [];
+            const changes = sm ? (sm.dailyChanges?.class?.[dateStr] || {}) : {};
+
+            (record.periods || []).forEach(periodNum => {
+                const idx = periodNum - 1;
+                const subject = changes[idx] !== undefined ? changes[idx] : baseSchedule[idx];
+                rows.push({ dateStr, dow, period: periodNum, subject: subject || '（授業不明）' });
+            });
+        });
+
+        // 日付・時限順に並べる
+        rows.sort((a, b) => a.dateStr === b.dateStr ? a.period - b.period : a.dateStr.localeCompare(b.dateStr));
+
+        const rowsHtml = rows.map(r => {
+            const [y, m, d] = r.dateStr.split('-');
+            return `<tr>
+                <td style="padding:6px 12px;">${parseInt(m)}/${parseInt(d)}</td>
+                <td style="padding:6px 12px;">${dayLabels[r.dow]}曜日</td>
+                <td style="padding:6px 12px; text-align:center;">${r.period}限</td>
+                <td style="padding:6px 12px;">${escapeHtml(r.subject)}</td>
+            </tr>`;
+        }).join('');
+
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width:460px; max-height:80vh; display:flex; flex-direction:column;">
+                <div class="modal-header">
+                    <h3>${escapeHtml(student.number)} ${escapeHtml(student.nameKanji)} の欠席一覧（${fiscalYear}年度・${rows.length}コマ）</h3>
+                    <button class="modal-close" aria-label="閉じる" id="closeAbsenceListModal">✕</button>
+                </div>
+                <div class="modal-body" style="overflow-y:auto; flex:1;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead><tr style="border-bottom:2px solid #e2e8f0;">
+                            <th style="padding:6px 12px; text-align:left;">日付</th>
+                            <th style="padding:6px 12px; text-align:left;">曜日</th>
+                            <th style="padding:6px 12px; text-align:center;">時限</th>
+                            <th style="padding:6px 12px; text-align:left;">科目</th>
+                        </tr></thead>
+                        <tbody>${rowsHtml || '<tr><td colspan="4" style="padding:12px; text-align:center; color:#94a3b8;">欠席記録なし</td></tr>'}</tbody>
+                    </table>
+                </div>
+            </div>`;
+
+        document.body.appendChild(modal);
+        modal.querySelector('#closeAbsenceListModal').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     },
 
     /**

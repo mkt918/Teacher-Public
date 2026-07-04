@@ -3721,3 +3721,107 @@ textarea:focus-visible,
     outline: 3px solid #93c5fd;
     outline-offset: 2px;
 }
+
+/* ===== 出欠サマリー：アコーディオン ===== */
+.attendance-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.att-accordion-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.att-accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+}
+
+.att-accordion-header:hover {
+    background: #f8fafc;
+}
+
+.att-acc-number {
+    font-size: 0.8em;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.att-acc-name {
+    font-weight: 700;
+    color: #1e293b;
+    flex: 1;
+}
+
+.att-acc-status {
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.att-acc-arrow {
+    color: #94a3b8;
+    font-size: 0.8em;
+    flex-shrink: 0;
+}
+
+.att-accordion-body {
+    padding: 12px 16px 16px;
+    border-top: 1px solid #f1f5f9;
+    background: #fafbfc;
+}
+
+.att-acc-subject-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.att-acc-subject-table th {
+    text-align: center;
+    padding: 6px 8px;
+    color: #64748b;
+    font-weight: 700;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.att-acc-subject-table th:first-child {
+    text-align: left;
+}
+
+.att-acc-subject-row {
+    cursor: pointer;
+    transition: filter 0.1s;
+}
+
+.att-acc-subject-row:hover {
+    filter: brightness(0.96);
+}
+
+.att-acc-subject-row td {
+    padding: 6px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.att-acc-actions {
+    margin-top: 12px;
+    text-align: right;
+}
