@@ -1,0 +1,11 @@
+{
+  "name": "teacher-app-tests",
+  "private": true,
+  "description": "アプリ本体はビルド不要の静的HTML/CSS/JSです。この package.json は GitHub Actions でスモークテストを自動実行するためだけに使用します。",
+  "scripts": {
+    "test:smoke": "node tests/run-smoke-ci.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}

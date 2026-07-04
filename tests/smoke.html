@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>スモークテスト</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        li { margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <h1>🔥 スモークテスト</h1>
+    <p>これまでのバグ修正が壊れていないかを確認する最小限の自動チェックです。</p>
+    <div id="results">実行中...</div>
+
+    <!-- アプリ本体のスクリプト（テスト対象） -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/utils/history-modal.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/modules/bus/index.js"></script>
+    <script src="../js/modules/groups/index.js"></script>
+    <script src="../js/modules/duties.js"></script>
+    <script src="../js/modules/schedule/index.js"></script>
+    <script src="../js/modules/calendar/index.js"></script>
+
+    <!-- テストランナー本体 -->
+    <script src="smoke-runner.js"></script>
+    <script src="smoke-tests.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            runSmokeTests();
+        });
+    </script>
+</body>
+</html>
