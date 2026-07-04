@@ -97,6 +97,18 @@ const App = {
         }
     },
 
+    // 全データ削除モーダルを開く
+    openClearAllDataModal() {
+        const modal = document.getElementById('clearAllDataModal');
+        const input = document.getElementById('clearAllDataConfirmInput');
+        const execBtn = document.getElementById('execClearAllDataBtn');
+        if (!modal) return;
+        input.value = '';
+        execBtn.disabled = true;
+        modal.classList.add('active');
+        setTimeout(() => input.focus(), 50);
+    },
+
     // 無操作タイマーのセットアップ
     setupInactivityTimer() {
         const resetTimer = () => {
@@ -193,12 +205,37 @@ const App = {
         if (clearBtn && !clearBtn.hasAttribute('data-bound')) {
             clearBtn.setAttribute('data-bound', 'true');
             clearBtn.addEventListener('click', () => {
-                if (confirm('本当に全データを削除しますか？\nこの操作は取り消せません。')) {
-                    if (confirm('最終確認：全データを削除してもよろしいですか？')) {
-                        StorageManager.clearAllData();
-                        location.reload();
-                    }
-                }
+                this.openClearAllDataModal();
+            });
+        }
+
+        // 全データ削除モーダルの各種ボタン（1回だけバインド）
+        const clearModal = document.getElementById('clearAllDataModal');
+        if (clearModal && !clearModal.hasAttribute('data-bound')) {
+            clearModal.setAttribute('data-bound', 'true');
+
+            const closeBtn = document.getElementById('closeClearAllDataModal');
+            const cancelBtn = document.getElementById('cancelClearAllDataBtn');
+            const execBtn = document.getElementById('execClearAllDataBtn');
+            const input = document.getElementById('clearAllDataConfirmInput');
+
+            const close = () => {
+                clearModal.classList.remove('active');
+                input.value = '';
+                execBtn.disabled = true;
+            };
+            closeBtn.addEventListener('click', close);
+            cancelBtn.addEventListener('click', close);
+            clearModal.addEventListener('click', (e) => { if (e.target === clearModal) close(); });
+
+            input.addEventListener('input', () => {
+                execBtn.disabled = input.value.trim() !== '削除';
+            });
+
+            execBtn.addEventListener('click', () => {
+                if (input.value.trim() !== '削除') return;
+                StorageManager.clearAllData();
+                location.reload();
             });
         }
 

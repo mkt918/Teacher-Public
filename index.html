@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教員業務支援アプリ</title>
-    <link rel="stylesheet" href="css/style.css?v=20260601v">
-    <link rel="stylesheet" href="css/modern-ui.css?v=20260601v">
+    <link rel="stylesheet" href="css/style.css?v=20260601w">
+    <link rel="stylesheet" href="css/modern-ui.css?v=20260601w">
 </head>
 
 <body>
@@ -1119,42 +1119,63 @@
         </div>
     </div>
 
+    <!-- モーダル: 全データ削除の確認 -->
+    <div class="modal" id="clearAllDataModal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚠️ 全データ削除の確認</h3>
+                <button class="modal-close" aria-label="閉じる" id="closeClearAllDataModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:#b91c1c; font-weight:bold;">
+                    生徒名簿・出欠記録・時間割・メモ・保存履歴など、このアプリの全データが完全に削除されます。
+                </p>
+                <p>この操作は取り消せません。よろしければ、下の欄に <strong>「削除」</strong> と入力してください。</p>
+                <input type="text" id="clearAllDataConfirmInput" class="form-control-lg" placeholder="削除" style="width:100%; margin-top:10px;" autocomplete="off">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelClearAllDataBtn">キャンセル</button>
+                <button class="btn btn-danger" id="execClearAllDataBtn" disabled>完全に削除する</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
-    <script src="js/utils.js?v=20260601v"></script>
-    <script src="js/utils/history-modal.js?v=20260601v"></script>
-    <script src="js/storage.js?v=20260601v"></script>
-    <script src="js/file-storage.js?v=20260601v"></script>
-    <script src="js/router.js?v=20260601v"></script>
-    <script src="js/modules/master.js?v=20260601v"></script>
-    <script src="js/modules/memo.js?v=20260601v"></script>
-    <script src="js/modules/seating-core.js?v=20260601v"></script>
-    <script src="js/modules/seating-lottery.js?v=20260601v"></script>
-    <script src="js/modules/seating-history.js?v=20260601v"></script>
-    <script src="js/modules/seating-print.js?v=20260601v"></script>
-    <script src="js/modules/duties.js?v=20260601v"></script>
-    <script src="js/modules/meeting-core.js?v=20260601v"></script>
-    <script src="js/modules/meeting-history.js?v=20260601v"></script>
-    <script src="js/modules/meeting-preference.js?v=20260601v"></script>
-    <script src="js/modules/meeting-print.js?v=20260601v"></script>
+    <script src="js/utils.js?v=20260601w"></script>
+    <script src="js/utils/history-modal.js?v=20260601w"></script>
+    <script src="js/storage.js?v=20260601w"></script>
+    <script src="js/file-storage.js?v=20260601w"></script>
+    <script src="js/router.js?v=20260601w"></script>
+    <script src="js/modules/master.js?v=20260601w"></script>
+    <script src="js/modules/memo.js?v=20260601w"></script>
+    <script src="js/modules/seating-core.js?v=20260601w"></script>
+    <script src="js/modules/seating-lottery.js?v=20260601w"></script>
+    <script src="js/modules/seating-history.js?v=20260601w"></script>
+    <script src="js/modules/seating-print.js?v=20260601w"></script>
+    <script src="js/modules/duties.js?v=20260601w"></script>
+    <script src="js/modules/meeting-core.js?v=20260601w"></script>
+    <script src="js/modules/meeting-history.js?v=20260601w"></script>
+    <script src="js/modules/meeting-preference.js?v=20260601w"></script>
+    <script src="js/modules/meeting-print.js?v=20260601w"></script>
     <!-- 新機能モジュール -->
-    <script src="js/modules/schedule/index.js?v=20260601v"></script>
-    <script src="js/modules/calendar/index.js?v=20260601v"></script>
-    <script src="js/modules/dashboard/index.js?v=20260601v"></script>
-    <script src="js/modules/bus/index.js?v=20260601v"></script>
-    <script src="js/modules/groups/index.js?v=20260601v"></script>
-    <script src="js/modules/attendance/index.js?v=20260601v"></script>
-    <script src="js/core/reactive.js?v=20260601v"></script>
-    <script src="js/core/dom-diff.js?v=20260601v"></script>
-    <script src="js/core/sync.js?v=20260601v"></script>
-    <script src="js/modules/test-tools/util.js?v=20260601v"></script>
-    <script src="js/modules/test-tools/word-group.js?v=20260601v"></script>
-    <script src="js/modules/test-tools/qm-renderer.js?v=20260601v"></script>
-    <script src="js/modules/test-tools/qm-events.js?v=20260601v"></script>
-    <script src="js/modules/test-tools/question-maker.js?v=20260601v"></script>
-    <script src="js/modules/test-tools/index.js?v=20260601v"></script>
-    <script src="js/modules/report/index.js?v=20260601v"></script>
-    <script src="js/modules/sync/index.js?v=20260601v"></script>
-    <script src="js/app.js?v=20260601v"></script>
+    <script src="js/modules/schedule/index.js?v=20260601w"></script>
+    <script src="js/modules/calendar/index.js?v=20260601w"></script>
+    <script src="js/modules/dashboard/index.js?v=20260601w"></script>
+    <script src="js/modules/bus/index.js?v=20260601w"></script>
+    <script src="js/modules/groups/index.js?v=20260601w"></script>
+    <script src="js/modules/attendance/index.js?v=20260601w"></script>
+    <script src="js/core/reactive.js?v=20260601w"></script>
+    <script src="js/core/dom-diff.js?v=20260601w"></script>
+    <script src="js/core/sync.js?v=20260601w"></script>
+    <script src="js/modules/test-tools/util.js?v=20260601w"></script>
+    <script src="js/modules/test-tools/word-group.js?v=20260601w"></script>
+    <script src="js/modules/test-tools/qm-renderer.js?v=20260601w"></script>
+    <script src="js/modules/test-tools/qm-events.js?v=20260601w"></script>
+    <script src="js/modules/test-tools/question-maker.js?v=20260601w"></script>
+    <script src="js/modules/test-tools/index.js?v=20260601w"></script>
+    <script src="js/modules/report/index.js?v=20260601w"></script>
+    <script src="js/modules/sync/index.js?v=20260601w"></script>
+    <script src="js/app.js?v=20260601w"></script>
 </body>
 
 </html>
