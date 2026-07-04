@@ -170,7 +170,7 @@ const MemoModule = {
                 <div class="memo-list-item ${isActive ? 'active' : ''}" data-id="${memo.id}" style="padding: 10px; border-radius: 6px; margin-bottom: 5px; cursor: pointer; background: ${isActive ? '#dbeafe' : '#f8f9fa'}; border: 1px solid ${isActive ? '#93c5fd' : '#e0e0e0'}; position: relative;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3px;">
                         <span style="font-weight: bold; font-size: 0.9em; flex: 1;">${escapeHtml(memo.title)}</span>
-                        <button class="pin-btn" data-id="${memo.id}" style="background: none; border: none; cursor: pointer; padding: 2px 6px; font-size: 1em; border-radius: 4px; transition: all 0.2s; ${memo.isPinned ? 'color: #d97706; background: #fef3c7;' : 'color: #9ca3af; opacity: 0.5;'}" title="${memo.isPinned ? 'ピン留め解除' : 'ピン留めする'}">
+                        <button class="pin-btn" data-id="${memo.id}" style="background: none; border: none; cursor: pointer; padding: 2px 6px; font-size: 1em; border-radius: 4px; transition: all 0.2s; ${memo.isPinned ? 'color: #d97706; background: #fef3c7;' : 'color: #9ca3af; opacity: 0.5;'}" title="${memo.isPinned ? 'ピン留め解除' : 'ピン留めする'}" aria-label="${memo.isPinned ? 'ピン留め解除' : 'ピン留めする'}">
                             ${memo.isPinned ? '📌' : '○'}
                         </button>
                     </div>

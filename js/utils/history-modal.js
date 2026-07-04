@@ -21,11 +21,13 @@ const HistoryModal = {
             modal = document.createElement('div');
             modal.id = config.modalId;
             modal.className = 'modal';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
             modal.innerHTML = `
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>${escapeHtml(config.title)}</h3>
-                        <button class="modal-close">✕</button>
+                        <button class="modal-close" aria-label="閉じる">✕</button>
                     </div>
                     <div class="modal-body"></div>
                 </div>

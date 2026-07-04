@@ -380,7 +380,7 @@ const ScheduleModule = {
                 html += `<td class="tt-cell" data-type="${type}" data-day="${d.key}" data-period="${period}" 
                     style="padding: 8px; border: 1px solid #ddd; text-align: center; min-height: 40px; background: ${subject ? '#e0f2fe' : 'white'}; cursor: pointer; position: relative;">
                     <span class="cell-content">${subject || '<span style="color: #ccc;">—</span>'}</span>
-                    ${subject ? `<button class="cell-clear-btn" style="position: absolute; top: 2px; right: 2px; border: none; background: rgba(0,0,0,0.1); border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.6;">×</button>` : ''}
+                    ${subject ? `<button class="cell-clear-btn" aria-label="クリア" style="position: absolute; top: 2px; right: 2px; border: none; background: rgba(0,0,0,0.1); border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.6;">×</button>` : ''}
                 </td>`;
             });
             html += '</tr>';
@@ -404,8 +404,8 @@ const ScheduleModule = {
             html += `<div class="subject-card" draggable="true" data-type="${type}" data-index="${idx}" data-value="${escapeHtml(displayText)}"
                 style="padding: 6px 12px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; cursor: grab; user-select: none; display: flex; align-items: center; gap: 4px;">
                 <span>${escapeHtml(displayText)}</span>
-                <button class="edit-subject-btn" data-type="${type}" data-index="${idx}" title="名前変更" style="border: none; background: none; color: #60a5fa; cursor: pointer; font-size: 12px; padding: 0 2px;">✏️</button>
-                <button class="delete-subject-btn" data-type="${type}" data-index="${idx}" style="border: none; background: none; color: #94a3b8; cursor: pointer; font-size: 14px;">×</button>
+                <button class="edit-subject-btn" data-type="${type}" data-index="${idx}" title="名前変更" aria-label="名前変更" style="border: none; background: none; color: #60a5fa; cursor: pointer; font-size: 12px; padding: 0 2px;">✏️</button>
+                <button class="delete-subject-btn" data-type="${type}" data-index="${idx}" aria-label="科目を削除" style="border: none; background: none; color: #94a3b8; cursor: pointer; font-size: 14px;">×</button>
             </div>`;
         });
         html += '</div></div>';
@@ -845,11 +845,13 @@ const ScheduleModule = {
         const modal = document.createElement('div');
         modal.id = 'timetableEditorModal';
         modal.className = 'modal active';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
         modal.innerHTML = `
             <div class="modal-content modal-large">
                 <div class="modal-header">
                     <h3>📝 ${title}の設定</h3>
-                    <button class="modal-close" id="closeTimetableEditor">✕</button>
+                    <button class="modal-close" aria-label="閉じる" id="closeTimetableEditor">✕</button>
                 </div>
                 <div class="modal-body">
                     <p class="help-text">各セルに科目名を入力してください。空欄にすると予定なしになります。</p>
@@ -927,14 +929,16 @@ const ScheduleModule = {
         const modal = document.createElement('div');
         modal.id = 'timetableListModal';
         modal.className = 'modal active';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
         modal.innerHTML = `
             <div class="modal-content" style="max-width: 95%; width: 1400px; max-height: 90vh;">
                 <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0;">📅 時間割一覧/変更</h3>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <button id="resetTimetableChangesBtn" style="background:#ef4444;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.9em;font-weight:bold;cursor:pointer;" title="この期間の変更データを全て削除してベースに戻す">🗑️ 変更リセット</button>
+                        <button id="resetTimetableChangesBtn" style="background:#ef4444;color:white;border:none;border-radius:6px;padding:7px 14px;font-size:0.9em;font-weight:bold;cursor:pointer;" title="この期間の変更データを全て削除してベースに戻す" aria-label="この期間の変更データを全て削除してベースに戻す">🗑️ 変更リセット</button>
                         <button id="saveTimetableListBtn" style="background:#16a34a;color:white;border:none;border-radius:6px;padding:7px 18px;font-size:0.95em;font-weight:bold;cursor:pointer;">💾 保存する</button>
-                        <button class="modal-close" id="closeTimetableListModal" style="font-size:1.2em;background:none;border:none;cursor:pointer;">✕</button>
+                        <button class="modal-close" aria-label="閉じる" id="closeTimetableListModal" style="font-size:1.2em;background:none;border:none;cursor:pointer;">✕</button>
                     </div>
                 </div>
                 <div class="modal-body" style="overflow-y: auto; max-height: calc(90vh - 120px);">
@@ -1169,8 +1173,8 @@ const ScheduleModule = {
         dates.forEach(d => {
             const dateKey = this._formatDate(d);
             html += `<td>
-                <button class="btn-icon tt-clear-btn" data-date="${dateKey}" title="空にする">🗑️</button>
-                <button class="btn-icon tt-reset-btn" data-date="${dateKey}" title="ベースに戻す">↩️</button>
+                <button class="btn-icon tt-clear-btn" data-date="${dateKey}" title="空にする" aria-label="空にする">🗑️</button>
+                <button class="btn-icon tt-reset-btn" data-date="${dateKey}" title="ベースに戻す" aria-label="ベースに戻す">↩️</button>
             </td>`;
         });
         html += '</tr>';

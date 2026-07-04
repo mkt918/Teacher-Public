@@ -98,11 +98,11 @@ Object.assign(SeatingModule, {
                     ${this.suits.map(suit => `
                         <div style="display: flex; align-items: center; gap: 5px; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; background: white;">
                             <span class="${suit.color}" style="font-size: 1.2em; font-weight:bold;">${suit.symbol}</span>
-                            <button class="btn-icon" data-action="dec" data-suit="${suit.id}" style="width:24px; height:24px; border-radius:50%; border:1px solid #ccc; background:#f0f0f0; cursor:pointer;">-</button>
+                            <button class="btn-icon" data-action="dec" data-suit="${suit.id}" aria-label="${suit.label}を減らす" style="width:24px; height:24px; border-radius:50%; border:1px solid #ccc; background:#f0f0f0; cursor:pointer;">-</button>
                             <input type="number" class="lottery-card-count" data-suit="${suit.id}"
                                    value="${settings.cardCounts[suit.id]}" min="0" max="13"
                                    style="width: 40px; padding: 4px; text-align: center; border:none; font-weight:bold; font-size:1.1em;" readonly>
-                            <button class="btn-icon" data-action="inc" data-suit="${suit.id}" style="width:24px; height:24px; border-radius:50%; border:1px solid #ccc; background:#f0f0f0; cursor:pointer;">+</button>
+                            <button class="btn-icon" data-action="inc" data-suit="${suit.id}" aria-label="${suit.label}を増やす" style="width:24px; height:24px; border-radius:50%; border:1px solid #ccc; background:#f0f0f0; cursor:pointer;">+</button>
                             <span style="font-size: 0.8em;">枚</span>
                         </div>
                     `).join('')}
@@ -333,6 +333,7 @@ Object.assign(SeatingModule, {
                     cardLockBtn.className = `card-lock-btn ${isCardLocked ? 'active' : ''}`;
                     cardLockBtn.innerHTML = isCardLocked ? '🔒' : '🔓';
                     cardLockBtn.title = isCardLocked ? 'ロック解除' : 'ロック';
+                    cardLockBtn.setAttribute('aria-label', cardLockBtn.title);
                     cardLockBtn.onclick = (e) => {
                         e.stopPropagation();
                         this.toggleCardLock(r, c);
@@ -375,6 +376,7 @@ Object.assign(SeatingModule, {
                     emptyLockBtn.className = `card-lock-btn ${isCardLocked ? 'active' : ''}`;
                     emptyLockBtn.innerHTML = isCardLocked ? '🔒' : '🔓';
                     emptyLockBtn.title = isCardLocked ? 'ロック解除' : 'ロック';
+                    emptyLockBtn.setAttribute('aria-label', emptyLockBtn.title);
                     emptyLockBtn.onclick = (e) => {
                         e.stopPropagation();
                         this.toggleCardLock(r, c);

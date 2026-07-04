@@ -160,7 +160,7 @@ const DutiesModule = {
                         <h4>${escapeHtml(duty.name)}</h4>
                         <span class="duty-count ${current > max ? 'over' : ''}">${current}/${max}名</span>
                     </div>
-                    <button class="btn-icon delete-duty" title="削除">🗑️</button>
+                    <button class="btn-icon delete-duty" title="削除" aria-label="削除">🗑️</button>
                 </div>
                 <div class="duty-description">${escapeHtml(duty.description || '')}</div>
                 <div class="duty-slots" data-duty-id="${escapeHtml(duty.id)}">

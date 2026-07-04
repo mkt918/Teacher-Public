@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教員業務支援アプリ</title>
-    <link rel="stylesheet" href="css/style.css?v=20260601u">
-    <link rel="stylesheet" href="css/modern-ui.css?v=20260601u">
+    <link rel="stylesheet" href="css/style.css?v=20260601v">
+    <link rel="stylesheet" href="css/modern-ui.css?v=20260601v">
 </head>
 
 <body>
     <!-- ヘッダー -->
     <header class="app-header">
-        <button class="hamburger-btn" id="hamburgerBtn" title="メニュー">
+        <button class="hamburger-btn" id="hamburgerBtn" title="メニュー" aria-label="メニュー">
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
@@ -151,10 +151,10 @@
                                 <div class="todo-input-group">
                                     <input type="text" id="todoInput" placeholder="タスクを入力...">
                                     <input type="date" id="todoDateInput" title="期限日" class="date-input-compact">
-                                    <button id="addTodoBtn" title="追加（Enter）">+</button>
+                                    <button id="addTodoBtn" title="追加（Enter）" aria-label="追加（Enter）">+</button>
                                     <div class="todo-sort-inline">
-                                        <button class="btn-sort-inline active" id="sortDateBtn" title="日付順">📅</button>
-                                        <button class="btn-sort-inline" id="sortManualBtn" title="手動で並び替え（ドラッグ）">✋</button>
+                                        <button class="btn-sort-inline active" id="sortDateBtn" title="日付順" aria-label="日付順">📅</button>
+                                        <button class="btn-sort-inline" id="sortManualBtn" title="手動で並び替え（ドラッグ）" aria-label="手動で並び替え（ドラッグ）">✋</button>
                                     </div>
                                 </div>
                             </div>
@@ -744,11 +744,11 @@
             </div>
 
             <!-- モーダル: CSVテンプレート出力（期間指定） -->
-            <div class="modal" id="calendarCsvExportModal">
+            <div class="modal" id="calendarCsvExportModal" role="dialog" aria-modal="true">
                 <div class="modal-content" style="min-width: 400px; width: 480px; max-width: 90vw;">
                     <div class="modal-header">
                         <h3>📤 CSVテンプレート出力</h3>
-                        <button class="modal-close" id="closeCalendarCsvExportModal">✕</button>
+                        <button class="modal-close" aria-label="閉じる" id="closeCalendarCsvExportModal">✕</button>
                     </div>
                     <div class="modal-body">
                         <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem;">
@@ -772,11 +772,11 @@
             </div>
 
             <!-- モーダル: CSVインポート（モード選択） -->
-            <div class="modal" id="calendarCsvImportModal">
+            <div class="modal" id="calendarCsvImportModal" role="dialog" aria-modal="true">
                 <div class="modal-content" style="min-width: 400px; width: 480px; max-width: 90vw;">
                     <div class="modal-header">
                         <h3>📥 CSVインポート</h3>
-                        <button class="modal-close" id="closeCalendarCsvImportModal">✕</button>
+                        <button class="modal-close" aria-label="閉じる" id="closeCalendarCsvImportModal">✕</button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -850,11 +850,11 @@
     <!-- フッター削除、内容はヘッダーに移動 -->
 
     <!-- モーダル: 生徒追加/編集 -->
-    <div class="modal" id="studentModal">
+    <div class="modal" id="studentModal" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="studentModalTitle">生徒追加</h3>
-                <button class="modal-close" id="closeStudentModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeStudentModal">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -878,11 +878,11 @@
     </div>
 
     <!-- モーダル: ToDo詳細編集 -->
-    <div class="modal" id="todoDetailModal">
+    <div class="modal" id="todoDetailModal" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>✅ ToDo詳細</h3>
-                <button class="modal-close" id="closeTodoDetailModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeTodoDetailModal">✕</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="todoDetailId">
@@ -913,11 +913,11 @@
         </div>
     </div>
     <!-- モーダル: ステート管理（統合） -->
-    <div class="modal" id="stateManageModal">
+    <div class="modal" id="stateManageModal" role="dialog" aria-modal="true">
         <div class="modal-content modal-large">
             <div class="modal-header">
                 <h3>💾 ステート管理</h3>
-                <button class="modal-close" id="closeStateManageModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeStateManageModal">✕</button>
             </div>
             <div class="modal-body">
                 <!-- 新規保存セクション -->
@@ -965,11 +965,11 @@
     <!-- 席替え履歴モーダルは js/modules/seating-history.js の openSaveHistoryModal() が動的に生成します -->
 
     <!-- モーダル: 係追加/編集 -->
-    <div class="modal" id="dutyModal">
+    <div class="modal" id="dutyModal" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="dutyModalTitle">係追加</h3>
-                <button class="modal-close" id="closeDutyModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeDutyModal">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -983,9 +983,9 @@
                 <div class="form-group">
                     <label for="studentsPerRotation">定員（人数）</label>
                     <div class="number-stepper">
-                        <button type="button" class="btn btn-secondary stepper-btn" id="decreaseStudentsBtn">-</button>
+                        <button type="button" class="btn btn-secondary stepper-btn" id="decreaseStudentsBtn" aria-label="定員を減らす">-</button>
                         <input type="number" id="studentsPerRotation" min="1" max="20" value="1" class="stepper-input">
-                        <button type="button" class="btn btn-secondary stepper-btn" id="increaseStudentsBtn">+</button>
+                        <button type="button" class="btn btn-secondary stepper-btn" id="increaseStudentsBtn" aria-label="定員を増やす">+</button>
                     </div>
                 </div>
             </div>
@@ -1000,11 +1000,11 @@
 
 
     <!-- モーダル: 保護者会設定 -->
-    <div class="modal" id="meetingSettingsModal">
+    <div class="modal" id="meetingSettingsModal" role="dialog" aria-modal="true">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>保護者会日程設定</h3>
-                <button class="modal-close" id="closeMeetingSettings">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeMeetingSettings">✕</button>
             </div>
             <div class="modal-body">
                 <div class="form-group-row">
@@ -1061,11 +1061,11 @@
     </div>
 
     <!-- モーダル: くじ引き結果入力 -->
-    <div class="modal" id="lotteryInputModal">
+    <div class="modal" id="lotteryInputModal" role="dialog" aria-modal="true">
         <div class="modal-content modal-large">
             <div class="modal-header">
                 <h3>くじ引き結果入力</h3>
-                <button class="modal-close" id="closeLotteryInputModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeLotteryInputModal">✕</button>
             </div>
             <div class="modal-body">
                 <p>引いたカードに対応する生徒番号を入力してください。<br>Enterキーで下の行に移動します。</p>
@@ -1082,11 +1082,11 @@
     </div>
 
     <!-- モーダル: 保護者会希望時間入力 -->
-    <div class="modal" id="meetingPreferenceModal">
+    <div class="modal" id="meetingPreferenceModal" role="dialog" aria-modal="true">
         <div class="modal-content modal-large">
             <div class="modal-header">
                 <h3 id="preferenceModalTitle">希望時間の選択</h3>
-                <button class="modal-close" id="closePreferenceModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closePreferenceModal">✕</button>
             </div>
             <div class="modal-body">
                 <p>参加可能な時間枠をクリックして選択してください（青：選択済み）。</p>
@@ -1102,11 +1102,11 @@
     </div>
 
     <!-- モーダル: 保護者会履歴管理 -->
-    <div class="modal" id="meetingHistoryModal">
+    <div class="modal" id="meetingHistoryModal" role="dialog" aria-modal="true">
         <div class="modal-content modal-large">
             <div class="modal-header">
                 <h3>保護者会スケジュール保存／読取</h3>
-                <button class="modal-close" id="closeMeetingHistoryModal">✕</button>
+                <button class="modal-close" aria-label="閉じる" id="closeMeetingHistoryModal">✕</button>
             </div>
             <div class="modal-body">
                 <div id="meetingHistoryList">
@@ -1120,41 +1120,41 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="js/utils.js?v=20260601u"></script>
-    <script src="js/utils/history-modal.js?v=20260601u"></script>
-    <script src="js/storage.js?v=20260601u"></script>
-    <script src="js/file-storage.js?v=20260601u"></script>
-    <script src="js/router.js?v=20260601u"></script>
-    <script src="js/modules/master.js?v=20260601u"></script>
-    <script src="js/modules/memo.js?v=20260601u"></script>
-    <script src="js/modules/seating-core.js?v=20260601u"></script>
-    <script src="js/modules/seating-lottery.js?v=20260601u"></script>
-    <script src="js/modules/seating-history.js?v=20260601u"></script>
-    <script src="js/modules/seating-print.js?v=20260601u"></script>
-    <script src="js/modules/duties.js?v=20260601u"></script>
-    <script src="js/modules/meeting-core.js?v=20260601u"></script>
-    <script src="js/modules/meeting-history.js?v=20260601u"></script>
-    <script src="js/modules/meeting-preference.js?v=20260601u"></script>
-    <script src="js/modules/meeting-print.js?v=20260601u"></script>
+    <script src="js/utils.js?v=20260601v"></script>
+    <script src="js/utils/history-modal.js?v=20260601v"></script>
+    <script src="js/storage.js?v=20260601v"></script>
+    <script src="js/file-storage.js?v=20260601v"></script>
+    <script src="js/router.js?v=20260601v"></script>
+    <script src="js/modules/master.js?v=20260601v"></script>
+    <script src="js/modules/memo.js?v=20260601v"></script>
+    <script src="js/modules/seating-core.js?v=20260601v"></script>
+    <script src="js/modules/seating-lottery.js?v=20260601v"></script>
+    <script src="js/modules/seating-history.js?v=20260601v"></script>
+    <script src="js/modules/seating-print.js?v=20260601v"></script>
+    <script src="js/modules/duties.js?v=20260601v"></script>
+    <script src="js/modules/meeting-core.js?v=20260601v"></script>
+    <script src="js/modules/meeting-history.js?v=20260601v"></script>
+    <script src="js/modules/meeting-preference.js?v=20260601v"></script>
+    <script src="js/modules/meeting-print.js?v=20260601v"></script>
     <!-- 新機能モジュール -->
-    <script src="js/modules/schedule/index.js?v=20260601u"></script>
-    <script src="js/modules/calendar/index.js?v=20260601u"></script>
-    <script src="js/modules/dashboard/index.js?v=20260601u"></script>
-    <script src="js/modules/bus/index.js?v=20260601u"></script>
-    <script src="js/modules/groups/index.js?v=20260601u"></script>
-    <script src="js/modules/attendance/index.js?v=20260601u"></script>
-    <script src="js/core/reactive.js?v=20260601u"></script>
-    <script src="js/core/dom-diff.js?v=20260601u"></script>
-    <script src="js/core/sync.js?v=20260601u"></script>
-    <script src="js/modules/test-tools/util.js?v=20260601u"></script>
-    <script src="js/modules/test-tools/word-group.js?v=20260601u"></script>
-    <script src="js/modules/test-tools/qm-renderer.js?v=20260601u"></script>
-    <script src="js/modules/test-tools/qm-events.js?v=20260601u"></script>
-    <script src="js/modules/test-tools/question-maker.js?v=20260601u"></script>
-    <script src="js/modules/test-tools/index.js?v=20260601u"></script>
-    <script src="js/modules/report/index.js?v=20260601u"></script>
-    <script src="js/modules/sync/index.js?v=20260601u"></script>
-    <script src="js/app.js?v=20260601u"></script>
+    <script src="js/modules/schedule/index.js?v=20260601v"></script>
+    <script src="js/modules/calendar/index.js?v=20260601v"></script>
+    <script src="js/modules/dashboard/index.js?v=20260601v"></script>
+    <script src="js/modules/bus/index.js?v=20260601v"></script>
+    <script src="js/modules/groups/index.js?v=20260601v"></script>
+    <script src="js/modules/attendance/index.js?v=20260601v"></script>
+    <script src="js/core/reactive.js?v=20260601v"></script>
+    <script src="js/core/dom-diff.js?v=20260601v"></script>
+    <script src="js/core/sync.js?v=20260601v"></script>
+    <script src="js/modules/test-tools/util.js?v=20260601v"></script>
+    <script src="js/modules/test-tools/word-group.js?v=20260601v"></script>
+    <script src="js/modules/test-tools/qm-renderer.js?v=20260601v"></script>
+    <script src="js/modules/test-tools/qm-events.js?v=20260601v"></script>
+    <script src="js/modules/test-tools/question-maker.js?v=20260601v"></script>
+    <script src="js/modules/test-tools/index.js?v=20260601v"></script>
+    <script src="js/modules/report/index.js?v=20260601v"></script>
+    <script src="js/modules/sync/index.js?v=20260601v"></script>
+    <script src="js/app.js?v=20260601v"></script>
 </body>
 
 </html>

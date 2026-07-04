@@ -254,8 +254,8 @@ const MasterModule = {
                     </div>
                 </div>
                 <div class="student-actions">
-                    <button class="btn-icon" onclick="MasterModule.openStudentModal('${escapeHtml(student.id)}')" title="編集">✏️</button>
-                    <button class="btn-icon delete" onclick="MasterModule.deleteStudent('${escapeHtml(student.id)}')" title="削除">🗑️</button>
+                    <button class="btn-icon" onclick="MasterModule.openStudentModal('${escapeHtml(student.id)}')" title="編集" aria-label="編集">✏️</button>
+                    <button class="btn-icon delete" onclick="MasterModule.deleteStudent('${escapeHtml(student.id)}')" title="削除" aria-label="削除">🗑️</button>
                 </div>
             </div>
         `).join('');

@@ -377,8 +377,8 @@ const MeetingModule = {
                     <div class="slot-student-chip ${isStudentLocked ? 'locked' : ''}" draggable="${!isStudentLocked}" data-student-id="${escapeHtml(student.id)}">
                         <span class="chip-number">${escapeHtml(student.number)}</span>
                         <span class="chip-name">${escapeHtml(student.nameKanji)}</span>
-                        <button class="remove-assignment" title="解除">×</button>
-                        <button class="student-lock-btn ${isStudentLocked ? 'active' : ''}" title="${isStudentLocked ? 'ロック解除' : 'ロック'}" data-slot-id="${escapeHtml(slot.id)}">
+                        <button class="remove-assignment" title="解除" aria-label="解除">×</button>
+                        <button class="student-lock-btn ${isStudentLocked ? 'active' : ''}" title="${isStudentLocked ? 'ロック解除' : 'ロック'}" aria-label="${isStudentLocked ? 'ロック解除' : 'ロック'}" data-slot-id="${escapeHtml(slot.id)}">
                             ${isStudentLocked ? '🔒' : '🔓'}
                         </button>
                     </div>
@@ -388,7 +388,7 @@ const MeetingModule = {
 
         if (!slot.studentId) {
             lockBtns = `
-                <button class="slot-empty-lock-btn ${isSlotLocked ? 'active' : ''}" title="${isSlotLocked ? '空枠ロック解除' : '空枠としてロック'}" data-slot-id="${escapeHtml(slot.id)}">
+                <button class="slot-empty-lock-btn ${isSlotLocked ? 'active' : ''}" title="${isSlotLocked ? '空枠ロック解除' : '空枠としてロック'}" aria-label="${isSlotLocked ? '空枠ロック解除' : '空枠としてロック'}" data-slot-id="${escapeHtml(slot.id)}">
                     ${isSlotLocked ? '空枠解除' : '空枠'}
                 </button>
             `;

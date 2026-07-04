@@ -166,8 +166,8 @@ const CalendarModule = {
             return `<div style="display: flex; gap: 10px; padding: 8px; border-bottom: 1px solid #eee; align-items: center; border-radius: 4px; ${highlightStyle}">
                 <span style="min-width: 100px; font-weight: ${e.highlight ? 'bold' : 'normal'};">${e.start.substring(5)} (${weekday})</span>
                 <span style="flex: 1; font-weight: ${e.highlight ? 'bold' : 'normal'};">${escapeHtml(e.title)}</span>
-                <button class="btn-icon" onclick="CalendarModule.toggleHighlight('${e.id}')" title="強調表示">${highlightIcon}</button>
-                <button class="btn-icon" onclick="CalendarModule.deleteEvent('${e.id}'); CalendarModule.render();">🗑️</button>
+                <button class="btn-icon" onclick="CalendarModule.toggleHighlight('${e.id}')" title="強調表示" aria-label="強調表示">${highlightIcon}</button>
+                <button class="btn-icon" onclick="CalendarModule.deleteEvent('${e.id}'); CalendarModule.render();" aria-label="削除">🗑️</button>
             </div>`;
         }).join('');
     },

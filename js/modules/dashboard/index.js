@@ -473,7 +473,7 @@ const DashboardModule = {
                          data-id="${todo.id}" data-index="${index}" data-column="${columnKey}">
                         <div class="todo-drag-handle">⋮⋮</div>
                         <hr>
-                        <button class="todo-delete separator-delete" title="削除">×</button>
+                        <button class="todo-delete separator-delete" title="削除" aria-label="削除">×</button>
                     </div>`;
             }
 
@@ -505,7 +505,7 @@ const DashboardModule = {
                     <span class="todo-text">${this._escapeHtml(todo.text)}${hasNote ? ' <small style="opacity:0.6;">📝</small>' : ''}</span>
                 </div>
                 ${starBtn}
-                <button class="todo-delete">×</button>
+                <button class="todo-delete" aria-label="削除">×</button>
             </div>`;
         }).join('');
     },

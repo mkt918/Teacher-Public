@@ -13,11 +13,13 @@ Object.assign(SeatingModule, {
             modal = document.createElement('div');
             modal.id = 'seatingHistoryModal';
             modal.className = 'modal';
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
             modal.innerHTML = `
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>席配置の保存・読取</h3>
-                        <button class="modal-close">✕</button>
+                        <button class="modal-close" aria-label="閉じる">✕</button>
                     </div>
                     <div class="modal-body" id="seatingHistoryModalBody"></div>
                 </div>

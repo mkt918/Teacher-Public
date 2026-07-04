@@ -488,11 +488,13 @@ const AttendanceModule = {
 
         const modal = document.createElement('div');
         modal.className = 'modal active';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
         modal.innerHTML = `
             <div class="modal-content" style="max-width:420px; max-height:80vh; display:flex; flex-direction:column;">
                 <div class="modal-header">
                     <h3>${escapeHtml(subjectName)}（${lessons.length}コマ）</h3>
-                    <button class="modal-close" id="closeSubjectModal">✕</button>
+                    <button class="modal-close" aria-label="閉じる" id="closeSubjectModal">✕</button>
                 </div>
                 <div class="modal-body" style="overflow-y:auto; flex:1;">
                     <div style="font-size:0.8em; color:#94a3b8; margin-bottom:8px;">📅 ${rangeLabel}</div>
@@ -564,6 +566,8 @@ const AttendanceModule = {
         const modal = document.createElement('div');
         modal.id = 'attendanceModal';
         modal.className = 'modal active';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
 
         const today = new Date();
         let currentYear = today.getFullYear();
@@ -573,12 +577,12 @@ const AttendanceModule = {
             <div class="modal-content modal-large">
                 <div class="modal-header">
                     <h3>${escapeHtml(student.number)} ${escapeHtml(student.nameKanji)} の出欠記録</h3>
-                    <button class="modal-close" id="closeAttModal">✕</button>
+                    <button class="modal-close" aria-label="閉じる" id="closeAttModal">✕</button>
                 </div>
                 <div class="modal-body">
                     <div class="calendar-controls">
                         <div class="calendar-nav-group">
-                            <button class="btn btn-sm btn-secondary" id="jumpPrevBtn" title="6ヶ月前">◀◀ 6ヶ月</button>
+                            <button class="btn btn-sm btn-secondary" id="jumpPrevBtn" title="6ヶ月前" aria-label="6ヶ月前">◀◀ 6ヶ月</button>
                             <button class="btn btn-sm" id="prevMonthBtn">◀ 前月</button>
                         </div>
                         <div class="calendar-nav-group">
@@ -587,7 +591,7 @@ const AttendanceModule = {
                         </div>
                         <div class="calendar-nav-group">
                             <button class="btn btn-sm" id="nextMonthBtn">次月 ▶</button>
-                            <button class="btn btn-sm btn-secondary" id="jumpNextBtn" title="6ヶ月後">6ヶ月 ▶▶</button>
+                            <button class="btn btn-sm btn-secondary" id="jumpNextBtn" title="6ヶ月後" aria-label="6ヶ月後">6ヶ月 ▶▶</button>
                         </div>
                         <label class="calendar-lock-toggle" id="lockMonthLabel">
                             <input type="checkbox" id="lockMonthCheck"> 月ロック

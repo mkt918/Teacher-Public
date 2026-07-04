@@ -84,9 +84,9 @@ const BusModule = {
         container.innerHTML = `
             <div class="bus-rows-control" style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
                 <span style="font-weight: bold;">座席行数:</span>
-                <button class="btn-icon bus-rows-dec" style="width: 32px; height: 32px; font-size: 18px; border-radius: 50%;">−</button>
+                <button class="btn-icon bus-rows-dec" aria-label="座席行数を減らす" style="width: 32px; height: 32px; font-size: 18px; border-radius: 50%;">−</button>
                 <span id="busRowsDisplay" style="font-size: 1.2em; font-weight: bold; min-width: 30px; text-align: center;">${escapeHtml(String(currentRows))}</span>
-                <button class="btn-icon bus-rows-inc" style="width: 32px; height: 32px; font-size: 18px; border-radius: 50%;">+</button>
+                <button class="btn-icon bus-rows-inc" aria-label="座席行数を増やす" style="width: 32px; height: 32px; font-size: 18px; border-radius: 50%;">+</button>
                 <span style="font-size: 0.85em; color: #666;">行</span>
             </div>
         `;
@@ -212,7 +212,7 @@ const BusModule = {
             return `
                 <div class="bus-seat occupied ${isLocked ? 'locked' : ''}" data-row="${row}" data-col="${col}" draggable="${!isLocked}">
                     <button class="bus-seat-lock-btn ${isLocked ? 'active' : ''}" data-row="${row}" data-col="${col}"
-                            title="${isLocked ? 'ロック解除' : 'この生徒をロックする'}">${isLocked ? '🔒' : '🔓'}</button>
+                            title="${isLocked ? 'ロック解除' : 'この生徒をロックする'}" aria-label="${isLocked ? 'ロック解除' : 'この生徒をロックする'}">${isLocked ? '🔒' : '🔓'}</button>
                     <div class="seat-number">${escapeHtml(student.number)}</div>
                     <div class="seat-name">${escapeHtml(student.nameKanji)}</div>
                 </div>
@@ -222,7 +222,7 @@ const BusModule = {
             return `
                 <div class="bus-seat empty ${isLocked ? 'locked' : ''}" data-row="${row}" data-col="${col}">
                     <button class="bus-seat-lock-btn ${isLocked ? 'active' : ''}" data-row="${row}" data-col="${col}"
-                            title="${isLocked ? '空席ロック解除' : 'この席を空席のままロックする'}">${isLocked ? '🔒' : '🔓'}</button>
+                            title="${isLocked ? '空席ロック解除' : 'この席を空席のままロックする'}" aria-label="${isLocked ? '空席ロック解除' : 'この席を空席のままロックする'}">${isLocked ? '🔒' : '🔓'}</button>
                     <span class="seat-label">${isLocked ? '空席固定' : (row + 1) + '-' + (col + 1)}</span>
                 </div>
             `;

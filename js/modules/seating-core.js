@@ -296,6 +296,7 @@ const SeatingModule = {
                 lockBtn.className = `seat-lock-btn ${isLocked ? 'active' : ''}`;
                 lockBtn.innerHTML = isLocked ? '🔒' : '🔓';
                 lockBtn.title = isLocked ? 'ロック解除' : 'ロックする';
+                lockBtn.setAttribute('aria-label', lockBtn.title);
                 lockBtn.onclick = (e) => {
                     e.stopPropagation();
                     this.toggleLock(r, c);
