@@ -201,17 +201,31 @@
 }
 
 /* ===== 生徒リスト ===== */
-/* 縦方向に5人ずつの塊（列）として並べ、視覚的にグループを把握しやすくする */
+/* 5人×2列＝10人を1ブロックとし、ブロック単位で横に並べる */
 .student-list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(5, auto);
-    grid-auto-columns: minmax(220px, 1fr);
-    gap: 0.5rem;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.5rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
     background: transparent;
     box-shadow: none;
+}
+
+.student-block {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(5, auto);
+    grid-auto-columns: minmax(200px, 1fr);
+    gap: 0.5rem;
+    flex-shrink: 0;
+    padding-right: 1.5rem;
+    border-right: 1px solid var(--border-color);
+}
+
+.student-block:last-child {
+    padding-right: 0;
+    border-right: none;
 }
 
 .student-item {

@@ -244,19 +244,30 @@ const MasterModule = {
             students.sort((a, b) => a.nameKana.localeCompare(b.nameKana, 'ja'));
         }
 
-        listContainer.innerHTML = students.map(student => `
-            <div class="student-item" data-id="${escapeHtml(student.id)}">
-                <div class="student-info">
-                    <div class="student-number">${escapeHtml(student.number)}</div>
-                    <div class="student-name">
-                        <div class="name-kanji">${escapeHtml(student.nameKanji)}</div>
-                        <div class="name-kana">${escapeHtml(student.nameKana)}</div>
+        // 5人×2列＝10人を1ブロックとして区切り、ブロック単位で横に並べる
+        const BLOCK_SIZE = 10;
+        const blocks = [];
+        for (let i = 0; i < students.length; i += BLOCK_SIZE) {
+            blocks.push(students.slice(i, i + BLOCK_SIZE));
+        }
+
+        listContainer.innerHTML = blocks.map(block => `
+            <div class="student-block">
+                ${block.map(student => `
+                    <div class="student-item" data-id="${escapeHtml(student.id)}">
+                        <div class="student-info">
+                            <div class="student-number">${escapeHtml(student.number)}</div>
+                            <div class="student-name">
+                                <div class="name-kanji">${escapeHtml(student.nameKanji)}</div>
+                                <div class="name-kana">${escapeHtml(student.nameKana)}</div>
+                            </div>
+                        </div>
+                        <div class="student-actions">
+                            <button class="btn-icon" onclick="MasterModule.openStudentModal('${escapeHtml(student.id)}')" title="編集" aria-label="編集">✏️</button>
+                            <button class="btn-icon delete" onclick="MasterModule.deleteStudent('${escapeHtml(student.id)}')" title="削除" aria-label="削除">🗑️</button>
+                        </div>
                     </div>
-                </div>
-                <div class="student-actions">
-                    <button class="btn-icon" onclick="MasterModule.openStudentModal('${escapeHtml(student.id)}')" title="編集" aria-label="編集">✏️</button>
-                    <button class="btn-icon delete" onclick="MasterModule.deleteStudent('${escapeHtml(student.id)}')" title="削除" aria-label="削除">🗑️</button>
-                </div>
+                `).join('')}
             </div>
         `).join('');
     },
