@@ -154,9 +154,9 @@ const MasterModule = {
         const nameKanji = document.getElementById('studentNameKanji').value.trim();
         const nameKana = document.getElementById('studentNameKana').value.trim();
 
-        // バリデーション
-        if (!number || !nameKanji || !nameKana) {
-            alert('すべての項目を入力してください');
+        // バリデーション（必須は出席番号のみ。氏名は後から入力できる）
+        if (!number) {
+            alert('出席番号を入力してください');
             return;
         }
 
