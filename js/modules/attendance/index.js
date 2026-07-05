@@ -944,7 +944,7 @@ const AttendanceModule = {
                 return '<p style="padding:12px; text-align:center; color:#94a3b8;">欠席記録なし</p>';
             }
 
-            let html = `<table class="att-abslist-table att-crosstab-table">
+            let html = `<div class="att-crosstab-scroll"><table class="att-abslist-table att-crosstab-table">
                 <thead><tr><th>回数</th>${subjects.map(s => `<th>${escapeHtml(s)}</th>`).join('')}</tr></thead>
                 <tbody>`;
             for (let i = 0; i < maxCount; i++) {
@@ -960,7 +960,7 @@ const AttendanceModule = {
                 });
                 html += '</tr>';
             }
-            html += '</tbody></table>';
+            html += '</tbody></table></div>';
             return html;
         };
 

@@ -3963,12 +3963,20 @@ textarea:focus-visible,
     border-bottom: 1px solid #f1f5f9;
 }
 
+.att-crosstab-scroll {
+    overflow-x: auto;
+}
+
+.att-crosstab-table {
+    width: auto;
+}
+
 .att-crosstab-table th,
 .att-crosstab-table td {
     border: 1px solid #e2e8f0;
-    padding: 6px 10px;
+    padding: 4px 8px;
     text-align: center;
-    font-size: 0.88em;
+    font-size: 0.72em;
     white-space: nowrap;
 }
 
