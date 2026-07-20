@@ -12,10 +12,9 @@ const SYNC_FIELDS = [
 ];
 
 const CloudSync = {
-    // GASのデプロイURL（デフォルトは開発者本人のもの。「各種設定」で
-    // 別のURLを登録した場合はそちらが優先される。配布時はデフォルトを
-    // 空文字に戻すこと）
-    gasUrl: 'https://script.google.com/macros/s/AKfycby9oh4D6RFTNpqW0qzvWbKh3J2omyD-ohr5CVNvZN5UilOKPNCeOqwRS50Jfc95bOw/exec',
+    // GASのデプロイURL（配布版のデフォルトは空文字。「各種設定」で
+    // 利用者自身のGAS URLを登録すると、その値が使われる）
+    gasUrl: '',
     apiKey: 'teacher-app-sync-key-2026',
 
     // 同期状態
