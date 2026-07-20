@@ -1,6 +1,6 @@
 # 担任業務支援アプリ
 
-**🔗 デモ・利用はこちら: [https://your-org.github.io/teacher/](https://your-org.github.io/teacher/)**
+**🔗 デモ・利用はこちら: [https://mkt918.github.io/Teacher-Public/](https://mkt918.github.io/Teacher-Public/)**
 
 担任業務を効率化するための統合Webアプリケーションです。生徒名簿管理、個人メモ、時間割・出欠、席替え、バス座席、保護者会調整、クラス係など、日々の業務をサポートします。
 
